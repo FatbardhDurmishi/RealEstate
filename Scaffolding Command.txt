@@ -1,0 +1,1 @@
+Scaffold-DbContext 'Data Source=(local);Initial Catalog=DBRealEstate;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False' Microsoft.EntityFrameworkCore.SqlServer -ContextDir Context -OutputDir Entities -DataAnnotations
