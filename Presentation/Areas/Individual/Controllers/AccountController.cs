@@ -6,9 +6,11 @@ using System.Security.Claims;
 using RealEstate.Data.Identity;
 using Presentation.Areas.Individual.Models.AccountViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using RealEstate.Utilites;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Presentation.Extensions;
+using RealEstate.App.Constants;
+using RealEstate.App.Implementations;
+using RealEstate.App.Interfaces;
 
 namespace Presentation.Areas.Individual.Controllers
 {
@@ -21,16 +23,18 @@ namespace Presentation.Areas.Individual.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         //private readonly IUserStore<IdentityUser> _userStore;
-       // private readonly IUserEmailStore<IdentityUser> _emailStore;
+        // private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly IUserService _userService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger
+            ILogger<AccountController> logger,
+            IUserService userService
             //IUserEmailStore<IdentityUser> userStore
             )
         {
@@ -39,7 +43,8 @@ namespace Presentation.Areas.Individual.Controllers
             _emailSender = emailSender;
             _logger = logger;
             _roleManager = roleManager;
-           // _userStore = userStore;
+            _userService = userService;
+            // _userStore = userStore;
             //_emailStore = GetEmailStore();
         }
 
@@ -74,11 +79,8 @@ namespace Presentation.Areas.Individual.Controllers
                     var roles = await _userManager.GetRolesAsync(user);
 
                     var userRole = roles.FirstOrDefault();
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
 
-                    if(userRole == SD.Role_User_Comp)
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "Company" });
-                    }
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -249,7 +251,7 @@ namespace Presentation.Areas.Individual.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
 
                 user.StreetAddres = model.StreetAddres;
                 user.City = model.City;
@@ -257,6 +259,10 @@ namespace Presentation.Areas.Individual.Controllers
                 user.PostalCode = model.PostalCode;
                 user.Name = model.Name;
                 user.PhoneNumber = model.PhoneNumber;
+                if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
+                {
+                    user.CompanyId = _userService.GetUserId();
+                }
                 var result = await _userManager.CreateAsync(user, model.Password);
 
 
@@ -265,16 +271,16 @@ namespace Presentation.Areas.Individual.Controllers
                     _logger.LogInformation("User created a new account with password.");
                     if (user.Role == null)
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Role_User_Comp);
+                        await _userManager.AddToRoleAsync(user, RoleConstants.Role_User_Indi);
                     }
                     else
                     {
                         await _userManager.AddToRoleAsync(user, user.Role);
                     }
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
+                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     //if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     //{
@@ -282,21 +288,19 @@ namespace Presentation.Areas.Individual.Controllers
                     //}
                     //else
                     //{
-                    //    if (User.IsInRole(SD.Role_Admin))
-                    //    {
-                    //        TempData["success"] = "New User Created Successfuly";
-                    //    }
-                    //    else
-                    //    {
-                    //        await _signInManager.SignInAsync(user, isPersistent: false);
-                    //    }
-                    //    return LocalRedirect(returnUrl);
+                    if (_userService.GetUserRole() == RoleConstants.Role_Admin || _userService.GetUserRole() == RoleConstants.Role_User_Comp)
+                    {
+                        TempData["success"] = "New User Created Successfuly";
+                    }
+                    else
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                    }
 
-                    //}
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
                 }
                 AddErrors(result);
             }
@@ -313,7 +317,7 @@ namespace Presentation.Areas.Individual.Controllers
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(AccountController.Login), "Account");
-         }
+        }
 
         [HttpPost]
         [AllowAnonymous]

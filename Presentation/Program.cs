@@ -15,7 +15,7 @@ builder.Services.AddDbContext<DBRealEstateContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -80,7 +80,8 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: "MyArea",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Account}/{action=Login}/{id?}");
+
 //SeedDatabase();
 
 app.UseAuthentication();
