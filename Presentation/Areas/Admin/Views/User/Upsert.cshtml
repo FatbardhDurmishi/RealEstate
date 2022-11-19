@@ -142,10 +142,6 @@
                     required: "FieldRequired')",
                     minlength: "MinLength3"
                 },
-                Surname: {
-                    required: "FieldRequired",
-                    minlength: "MinLength3"
-                },
                 Email: {
                     required: "FieldRequired",
                     email: "EmailInvalidFormat",
@@ -163,9 +159,6 @@
                     minlength: "MinLength8",
                     equalTo: "PasswordNotMatch",
                 },
-                RoleId: {
-                    required: "FieldRequired",
-                },
             },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
@@ -181,8 +174,8 @@
                 submitHandler: function (form) {
                     form.submit();
                 }
-                            });
-                        })
+                                    });
+                                })
     </script>
 }
 
