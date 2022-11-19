@@ -15,7 +15,7 @@ using RealEstate.App.Interfaces;
 namespace Presentation.Areas.Individual.Controllers
 {
     [Authorize]
-    [Area("Individual")]
+    [Area(AreaConstants.Individual)]
     [Route("[area]/[controller]/[action]")]
     public class AccountController : Controller
     {
@@ -259,6 +259,7 @@ namespace Presentation.Areas.Individual.Controllers
                 user.PostalCode = model.PostalCode;
                 user.Name = model.Name;
                 user.PhoneNumber = model.PhoneNumber;
+                user.Role=model.Role;
                 if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
                 {
                     user.CompanyId = _userService.GetUserId();
@@ -291,16 +292,19 @@ namespace Presentation.Areas.Individual.Controllers
                     if (_userService.GetUserRole() == RoleConstants.Role_Admin || _userService.GetUserRole() == RoleConstants.Role_User_Comp)
                     {
                         TempData["success"] = "New User Created Successfuly";
+                        //_logger.LogInformation("User created a new account with password.");
+                        return RedirectToAction("Index", "User", new { area = "Admin" });
                     }
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
                     }
 
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                   // await _signInManager.SignInAsync(user, isPersistent: false);
+                    //_logger.LogInformation("User created a new account with password.");
+                    
                 }
                 AddErrors(result);
             }

@@ -6,11 +6,12 @@ using System.Text;
 using System.Text.Encodings.Web;
 using RealEstate.Data.Identity;
 using Presentation.Areas.Individual.Models.ManageViewModels;
+using RealEstate.App.Constants;
 
 namespace Presentation.Areas.Individual.Controllers
 {
     [Authorize]
-    [Area("Individual")]
+    [Area(AreaConstants.Individual)]
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {

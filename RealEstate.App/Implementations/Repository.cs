@@ -23,6 +23,7 @@ namespace RealEstate.App.Implementations
         public void Add(T entity)
         {
             dbSet.Add(entity);
+            _db.SaveChanges();
         }
 
         //includeProp - "Category, CoverType"
@@ -65,11 +66,13 @@ namespace RealEstate.App.Implementations
         public void Remove(T entity)
         {
             dbSet.Remove(entity);
+            _db.SaveChanges();
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
+            _db.SaveChanges();
         }
 
         public int SaveChanges()

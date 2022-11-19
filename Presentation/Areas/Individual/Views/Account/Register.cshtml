@@ -40,7 +40,7 @@
 </head>
 
 <body>
-    <div class="container position-relative bg-white d-flex-block p-0">
+    <div class="container-xxl position-relative bg-white d-flex-block p-0">
         <!-- Spinner Start -->
         @*  <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -109,24 +109,17 @@
                                 <label for="floatingText">Street Address</label>
                                 <span asp-validation-for="@Model.StreetAddres" class="text-danger"></span>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <a asp-action="ForgotPassword" asp-controller="Account">Forgot Password</a>
-                            </div>
-                            @if (userService.GetUserRole()==RoleConstants.Role_Admin)
-                            {
 
-                                <div class="form-floating mb-3">
-                                    <select asp-for="Role" asp-items="@Model.RoleList" class="form-select">
-                                        <option disabled selected>--Select Role--</option>
-                                    </select>
-                                </div>
-                            }else if (userService.GetUserRole()==RoleConstants.Role_User_Comp)
-                            {
-                                
-                            }
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
-                            <p class="text-center mb-0">Already have an Account? <button class="btn btn-secondary" asp-action="Login" asp-controller="Account">Sign In</button></p>
+                            <div class="form-check m-1 mb-3">
+                                <input class="form-check-input" type="checkbox" value="Company" asp-for="Role" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Business Account
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4"> Sign Up</button>
+
                         </form>
+                        <p class="text-center mb-0">Already have an Account? <a class="btn btn-secondary" asp-area="Individual" asp-action="Login" asp-controller="Account">Sign In</a></p>
                     </div>
 
                 </div>
@@ -135,9 +128,6 @@
         </div>
         <!-- Sign Up End -->
     </div>
-
-
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -152,10 +142,10 @@
 
     <!-- Template Javascript -->
     <script src="~/theme/js/main.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 </body>
 
 </html>
 
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
+
+

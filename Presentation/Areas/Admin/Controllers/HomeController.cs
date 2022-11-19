@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.App.Constants;
 
 namespace Presentation.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {
-        [Area("Admin")]
+        [Area(AreaConstants.Admin)]
         [Route("[area]/[controller]/[action]")]
         public IActionResult Index()
         {

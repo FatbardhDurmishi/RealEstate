@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="~/theme/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/theme/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-                @* <link rel="stylesheet" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />*@
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
     <!-- jQuery Confirm -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 }
@@ -24,7 +24,7 @@
                 </ol>
             </div>
             <div class="col-6 text-end">
-                <a class="btn btn-primary"> <i class="bi bi-plus-circle"></i>&nbsp; Add User</a>
+                <a asp-area="Admin" asp-action="Upsert" asp-controller="User" class="btn btn-primary"> <i class="bi bi-plus-circle"></i>&nbsp; Add User</a>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="#user-list" class="table table-bordered table-hover">
+                        <table id="user-list" class="table table-bordered table-striped table-hover">
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -69,101 +69,10 @@
     <script src="~/theme/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/theme/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://kit.fontawesome.com/a68cad6f07.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <!-- jQuery Confirm -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var url = "@Url.Action("GetUsersJson", "User")";
-            $("#user-list").DataTable({
-                pageLength: 15,
-                responsive: true,
-                autoWidth: false,
-                order: [[0, "desc"]],
-                //"processing": true,
-                //"serverSide": true,
-                //"filter": true,
-                //"orderMulti": false,
-                ajax: {
-                    url: url,
-                    dataSrc: ""
-                },
-                columns: [
-                    { data: "id", title: "Id", width: "4%" },
-                    { data: "name", title: "Name" },
-                    { data: "phoneNumber", title: "Phone Number", },
-                    { data: "email", title: "Email" },
-                    {
-                        data: "emailConfirmed", title: "Email Confirmed", sClass: "text-center", render: function (a, b, data, d) {
-                            if (data.emailConfirmed == true) {
-                                return '<i class="fa fa-check text-success"></i>';
-                            }
-                            else {
-                                return '<i class="fa fa-check text-danger"></i>';
-                            }
-                        }
-                    },
-                    {
-                        data: null, title: "Actions", sClass: "text-center", render: function (a, b, data, d) {
-                            var actions = '<div class="btn-group btn-hspace">' +
-                                '<button type= "button" data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" ariaexpanded="true"><spanclass="icon mdi mdi-chevron-down"></span></button >' +
-                                '<div class="dropdown-menu dropdown-menu-right" >';
-                            var urlEdit = '@Url.Action("Edit", "User", new { area = "Admin"})';
-                            var urlDetails = '@Url.Action("Details", "User", new { area = "Admin"})';
-                            actions += '<a class="dropdown-item" href="' + urlEdit + '/' + data.id + '" data-id="' + data.id + '"><i class="fa fa-edit text-warning"></i> Edit</a>';
-                            actions += '<a class="dropdown-item" href="' + urlDetails + '/' + data.id + '" data-id="' + data.id + '"><i class="fa fa-edit text-primary"></i> Details</a>';
-                            actions += '<a class="dropdown-item js-delete" href="javascript:void(0)" data-id="' + data.id + '"><i class="fa fa-trash text-danger"></i> Delete</a>';
-                            actions += '</div></div>';
-                            return actions;
-                        },
-                    }
-                ],
-            });
-            $(document).on("click", ".js-delete", function () {
-                debugger;
-                var dataId = $(this).attr("data-id");
-                $.confirm({
-                    title: '<i class="fa fa-warning"></i> Please Confirm',
-                    content: 'Are you sure you want to delete user with id:' + dataId,
-                    autoClose: 'cancel|10000',
-                    type: 'red',
-                    closeIcon: true,
-                    closeIconClass: 'fa fa-close',
-                    buttons: {
-                        cancel: {
-                            text: 'Cancel',
-                            keys: ['esc'],
-                            action: function () {
-                            }
-                        },
-                        confirm: {
-                            text: 'Delete',
-                            btnClass: 'btn-danger',
-                            keys: ['enter'],
-                            action: function () {
-                                var url = '@Url.Action("Delete")';
-                                $.ajax({
-                                    type: "DELETE",
-                                    async: false,
-                                    url: url,
-                                    dataType: "json",
-                                    data: {
-                                        id: dataId,
-                                    },
-                                    success: function (data) {
-                                        debugger;
-                                        table.ajax.reload();
-                                        toastr.success('Deleted Successfully');
-                                    },
-                                    error: function (xhr, textStatus, errorThrown) {
-                                        debugger;
-                                        toastr.error('Something went wrong!');
-                                    }
-                                });
-                            }
-                        },
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script> 
+    <script src="~/js/user.js"></script>
     }

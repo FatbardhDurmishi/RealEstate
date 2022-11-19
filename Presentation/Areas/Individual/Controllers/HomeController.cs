@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
+using RealEstate.App.Constants;
 
 namespace Presentation.Areas.Individual.Controllers
 {
-    [Area("Individual")]
+    [Area(AreaConstants.Individual)]
     public class HomeController : Controller
     {
         public IActionResult Index()
