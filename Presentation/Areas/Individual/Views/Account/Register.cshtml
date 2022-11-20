@@ -66,41 +66,41 @@
                                 <label for="floatingInput">Email address</label>
                                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="form-floating mb-3  col-5 ">
+                            <div class="d-flex row">
+                                <div class="form-floating mb-3  col-sm-6 ">
                                     <input type="password" asp-for="Password" class="form-control" id="floatingPassword" placeholder="Password">
-                                    <label for="floatingPassword">Password</label>
+                                    <label for="floatingPassword">&nbsp; Password</label>
                                     <span asp-validation-for="@Model.Password" class="text-danger"></span>
                                 </div>
-                                <div class="form-floating mb-3 col-5 ">
+                                <div class="form-floating mb-3 col-sm-6 ">
                                     <input type="password" asp-for="ConfirmPassword" class="form-control" id="floatingPassword" placeholder="Password">
-                                    <label for="floatingPassword">Confirm Password</label>
+                                    <label for="floatingPassword">&nbsp; Confirm Password</label>
                                     <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex row">
 
-                                <div class="form-floating mb-3  col-5 ">
+                                <div class="form-floating mb-3 col-sm-6 ">
                                     <input type="text" asp-for="Name" class="form-control" id="floatingText" placeholder="text">
-                                    <label for="floatingText">Full Name</label>
+                                    <label for="floatingText">&nbsp; Full Name</label>
                                     <span asp-validation-for="@Model.Name" class="text-danger"></span>
                                 </div>
-                                <div class="form-floating mb-3 col-5">
+                                <div class="form-floating mb-3 col-sm-6">
                                     <input asp-for="State" class="form-control" id="floatingText" placeholder="Password">
-                                    <label for="floatingText">State</label>
+                                    <label for="floatingText">&nbsp; State</label>
                                     <span asp-validation-for="@Model.State" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="form-floating mb-3 col-5">
+                            <div class="d-flex row">
+                                <div class="form-floating mb-3 col-sm-6">
                                     <input asp-for="City" class="form-control" id="floatingText" placeholder="Password">
-                                    <label for="floatingText">City</label>
+                                    <label for="floatingText">&nbsp City</label>
                                     <span asp-validation-for="@Model.City" class="text-danger"></span>
                                 </div>
 
-                                <div class="form-floating mb-3 col-5">
+                                <div class="form-floating mb-3 col-sm-6">
                                     <input asp-for="PostalCode" class="form-control" id="floatingText" placeholder="Password">
-                                    <label for="floatingText">Postal Code</label>
+                                    <label for="floatingText">&nbsp; Postal Code</label>
                                     <span asp-validation-for="@Model.PostalCode" class="text-danger"></span>
                                 </div>
                             </div>
