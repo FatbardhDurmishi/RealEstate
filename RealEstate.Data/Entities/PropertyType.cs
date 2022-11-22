@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace RealEstate.Data.Entities
 {
-    public class PropertyType
+    public partial class PropertyType
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public PropertyType()
+        {
+            Properties = new HashSet<Property>();
+        }
 
+        [Key]
+        public int Id { get; set; }
+        [StringLength(50)]
+        public string Name { get; set; } = null!;
+
+        [InverseProperty("PropertyTypeNavigation")]
+        public virtual ICollection<Property> Properties { get; set; }
     }
 }

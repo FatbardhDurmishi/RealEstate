@@ -27,6 +27,7 @@ namespace Presentation.Areas.Individual.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -35,6 +36,8 @@ namespace Presentation.Areas.Individual.Controllers
             IEmailSender emailSender,
             ILogger<AccountController> logger,
             IUserService userService
+,
+            IUserRepository userRepository
             //IUserEmailStore<IdentityUser> userStore
             )
         {
@@ -44,6 +47,7 @@ namespace Presentation.Areas.Individual.Controllers
             _logger = logger;
             _roleManager = roleManager;
             _userService = userService;
+            _userRepository = userRepository;
             // _userStore = userStore;
             //_emailStore = GetEmailStore();
         }
@@ -55,6 +59,31 @@ namespace Presentation.Areas.Individual.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string? returnUrl)
         {
+            //if (!_roleManager.RoleExistsAsync(RoleConstants.Role_Admin).GetAwaiter().GetResult())
+            //{
+            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_Admin)).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Indi)).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Comp)).GetAwaiter().GetResult();
+            //}
+            //if (_userRepository.GetAll().Count() < 1)
+            //{
+            //    var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
+
+            //    user.StreetAddres = "Admin";
+            //    user.City = "Admin";
+            //    user.State = "Admin";
+            //    user.PostalCode = "Admin";
+            //    user.Name = "Admin";
+            //    user.PhoneNumber = "Admin";
+            //    user.Role = "Admin";
+
+            //    var result = await _userManager.CreateAsync(user, "Admin.123");
+
+            //    if (result.Succeeded)
+            //    {
+            //        await _userManager.AddToRoleAsync(user, RoleConstants.Role_Admin);
+            //    }
+            //}
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -81,8 +110,8 @@ namespace Presentation.Areas.Individual.Controllers
                     var userRole = roles.FirstOrDefault();
                     return RedirectToAction("Index", "Home", new { area = "Admin" });
 
-                    _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    //_logger.LogInformation("User logged in.");
+                    //return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -223,14 +252,10 @@ namespace Presentation.Areas.Individual.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string? returnUrl, RegisterViewModel model)
+        public async Task<IActionResult> Register(string? returnUrl, RegisterViewModel model)
         {
-            //if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
-            //{
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Indi)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Comp)).GetAwaiter().GetResult();
-            //}
+
+
             ViewData["ReturnUrl"] = returnUrl;
             model = new RegisterViewModel()
             {
@@ -248,36 +273,39 @@ namespace Presentation.Areas.Individual.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl)
         {
+
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-
-                user.StreetAddres = model.StreetAddres;
-                user.City = model.City;
-                user.State = model.State;
-                user.PostalCode = model.PostalCode;
-                user.Name = model.Name;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Role=model.Role;
-                if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
+                var user = new ApplicationUser
                 {
-                    user.CompanyId = _userService.GetUserId();
+                    UserName = model.Email,
+                    Email = model.Email,
+                    EmailConfirmed = true,
+                    StreetAddres = model.StreetAddres,
+                    City = model.City,
+                    State = model.State,
+                    PostalCode = model.PostalCode,
+                    Name = model.Name,
+                    PhoneNumber = model.PhoneNumber
+                };
+                if (model.Role == "false")
+                {
+                    user.Role = RoleConstants.Role_User_Indi;
                 }
+                else
+                {
+                    user.Role = model.Role;
+                }
+
+
                 var result = await _userManager.CreateAsync(user, model.Password);
 
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    if (user.Role == null)
-                    {
-                        await _userManager.AddToRoleAsync(user, RoleConstants.Role_User_Indi);
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, user.Role);
-                    }
+                    await _userManager.AddToRoleAsync(user, user.Role);
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
@@ -289,22 +317,20 @@ namespace Presentation.Areas.Individual.Controllers
                     //}
                     //else
                     //{
-                    if (_userService.GetUserRole() == RoleConstants.Role_Admin || _userService.GetUserRole() == RoleConstants.Role_User_Comp)
-                    {
-                        TempData["success"] = "New User Created Successfuly";
-                        //_logger.LogInformation("User created a new account with password.");
-                        return RedirectToAction("Index", "User", new { area = "Admin" });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
-                    }
+                    TempData["success"] = "Account Created Successfuly";
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
 
 
-                   // await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    // await _signInManager.SignInAsync(user, isPersistent: false);
                     //_logger.LogInformation("User created a new account with password.");
-                    
+
+                }
+                else
+                {
+                    foreach (IdentityError error in result.Errors)
+                        Console.WriteLine($"Oops! {error.Description} ({error.Code}");
                 }
                 AddErrors(result);
             }
@@ -506,7 +532,7 @@ namespace Presentation.Areas.Individual.Controllers
 
 
         [HttpGet]
-        public IActionResult AccessDenied()
+        public IActionResult AccesRoleConstantsenied()
         {
             return View();
         }

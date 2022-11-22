@@ -23,6 +23,10 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IRolesRepository, RolesRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IPropertyRepository, PropertyRepository>();
+builder.Services.AddTransient<IPropertyTypeRepository, PropertyTypeRepository>();
+builder.Services.AddTransient<ITransactionTypeRepository, TransactionTypeRepository>();
+builder.Services.AddTransient<IPropertyImagesRepository, PropertyImagesRepository>();
 
 
 
@@ -47,7 +51,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     // User settings.
     options.User.AllowedUserNameCharacters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = false;
+    options.User.RequireUniqueEmail = true;
+
 });
 
 builder.Services.ConfigureApplicationCookie(options =>

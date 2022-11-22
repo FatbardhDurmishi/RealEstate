@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Company\Controllers\" />
-    <Folder Include="Areas\Company\Views\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Identity\" />
+    <Folder Include="wwwroot\Images\" />
+    <Folder Include="wwwroot\Images\Property\PropertyImages\" />
+    <Folder Include="wwwroot\Images\Property\PropertyCoverPhoto\" />
   </ItemGroup>
 
   <ItemGroup>

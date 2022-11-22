@@ -1,0 +1,163 @@
+﻿@using RealEstate.App.Constants;
+@using RealEstate.App.Interfaces;
+@model PropertyVM
+@inject IUserService userService
+
+<div class="content">
+    <partial name="_Navbar" />
+    <div class="container-fluid pt-4 px-4 col-12 justify-content-between">
+        <div class="row mb-3">
+            <div class="col-10">
+                <ol class="breadcrumb float-sm-right col-10 text-start">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Users</a></li>
+                    @if (Model.Property.Id == 0)
+                    {
+                        <li class="breadcrumb-item active">Add Property</li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item">Edit Property</li>
+                        <li class="breadcrumb-item active">@Model.Property.Id</li>
+
+                    }
+                </ol>
+            </div>
+            <div class="col-2 text-end">
+                <a asp-area="Company" asp-controller="Properties" asp-action="Index" class="btn btn-primary ">Back to list</a>
+            </div>
+        </div>
+        <form asp-area="Company" asp-controller="Properties" asp-action="Upsert" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Property.Id" />
+            <input type="hidden" asp-for="Property.CoverImageUrl" />
+            <input type="hidden" asp-for="Property.PropertyImages" />
+            <div class="col-lg-12 col-sm-6">
+                <div class="form-floating mb-3  ">
+                    <input asp-for="Property.Name" class="form-control" id="floatingText">
+                    <label for="floatingText">Name</label>
+                    <span asp-validation-for="@Model.Property.Name" class="text-danger"></span>
+                </div>
+                @if (userService.GetUserRole() == RoleConstants.Role_User_Comp)
+                {
+                    <div class="form-floating mb-3  ">
+                        <select asp-for="Property.UserId" asp-items="@Model.UsersList" class="form-select" id="floatingInput"></select>
+                        <label for="floatingInput">User</label>
+                        <span asp-validation-for="@Model.Property.UserId" class="text-danger"></span>
+                    </div>
+                }
+
+            </div>
+            <div class=" row">
+                <div class="form-floating mb-3 col-sm-6 ">
+                    <input asp-for="Property.BedRooms" class="form-control">
+                    <label for="floatingPassword">&nbsp; BeddRooms</label>
+                    <span asp-validation-for="@Model.Property.BedRooms" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3 col-sm-6 ">
+                    <input asp-for="Property.BathRooms" class="form-control">
+                    <label for="floatingText">&nbsp; BathRooms</label>
+                    <span asp-validation-for="@Model.Property.BathRooms" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex row">
+
+                <div class="form-floating mb-3  col-sm-6 ">
+                    <input type="text" asp-for="Property.Area" class="form-control" id="floatingText" placeholder="text">
+                    <label for="floatingText">&nbsp; Area(in m&sup2;)</label>
+                    <span asp-validation-for="@Model.Property.Area" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3 col-sm-6">
+                    <input asp-for="Property.Price" class="form-control" id="floatingText">
+                    <label for="floatingText">&nbsp; Price</label>
+                    <span asp-validation-for="@Model.Property.Price" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="form-floating mb-3 col-sm-6">
+                    <input asp-for="Property.State" class="form-control" id="floatingText">
+                    <label for="floatingText">&nbsp; State</label>
+                    <span asp-validation-for="@Model.Property.State" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3 col-sm-6">
+                    <input asp-for="Property.City" class="form-control" id="floatingText">
+                    <label for="floatingText">&nbsp; City</label>
+                    <span asp-validation-for="@Model.Property.City" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Property.StreetAddress" class="form-control" id="floatingText">
+                <label for="floatingText">&nbsp; Street Address</label>
+                <span asp-validation-for="@Model.Property.StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="row justify-content-between">
+                <div class="form-floating mb-3 col-sm-6">
+                    <select asp-for="Property.TransactionType" asp-items="@Model.TransactionList" class="form-select" id="floatingInput"></select>
+                    <label for="floatingText">&nbsp; TransactionType</label>
+                    <span asp-validation-for="@Model.Property.TransactionType" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3 col-sm-6">
+                    <select asp-for="Property.PropertyType" asp-items="@Model.PropertyTypeList" class="form-select" id="floatingInput"></select>
+                    <label for="floatingText">&nbsp; Property Type</label>
+                    <span asp-validation-for="@Model.Property.PropertyType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea rows="3" asp-for="Property.Description" class="form-control" id="floatingInput"></textarea>
+                <label for="floatingText">&nbsp; Description</label>
+                <span asp-validation-for="@Model.Property.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CoverImage"></label>
+                <input asp-for="CoverImage" id="uploadBox" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="PropertyImages"></label>
+                <input asp-for="PropertyImages" id="uploadBox" class="form-control" />
+            </div>
+
+            @if (Model.Property.Id == 0)
+            {
+                <button type="submit" class="btn btn-primary py-3 w-100 mb-4 col-sm-6">Add Property</button>
+
+            }
+            else
+            {
+                <button type="submit" class="btn btn-secondary py-3 w-100 mb-4 col-sm-6">Update</button>
+
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+        <script src="https://cdn.tiny.cloud/1/8nmp0h00j9mvwkmze0o0mof0lkhqm77c6afbdp31ne2leuc4/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    }
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak autocorrect',
+            toolbar_mode: '+floating',
+            rows: "3"
+        });
+
+
+        function ValidateInput() {
+            if (document.getElementById("uploadBox").value == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please upload an Image!',
+
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

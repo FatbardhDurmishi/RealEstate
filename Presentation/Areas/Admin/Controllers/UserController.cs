@@ -85,6 +85,7 @@ namespace Presentation.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(UserVM model)
         {
             if (ModelState.IsValid)
@@ -102,18 +103,14 @@ namespace Presentation.Areas.Admin.Controllers
                     if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
                     {
                         user.Role = RoleConstants.Role_User_Indi;
+                        user.CompanyId = _userService.GetUserId();
                     }
                     else
                     {
                         user.Role = model.Role;
                     }
 
-                    if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
-                    {
-                        user.CompanyId = _userService.GetUserId();
-                    }
                     var result = await _userManager.CreateAsync(user, model.Password);
-
 
                     if (result.Succeeded)
                     {
@@ -190,7 +187,8 @@ namespace Presentation.Areas.Admin.Controllers
 
             if (_userService.GetUserRole() == RoleConstants.Role_Admin)
             {
-                var users = _userRepository.GetAll();
+                var userId = _userService.GetUserId();
+                var users = _userRepository.GetAll(x=>x.Id !=userId);
                 var result = users.Select(x => new
                 {
                     id = x.Id,

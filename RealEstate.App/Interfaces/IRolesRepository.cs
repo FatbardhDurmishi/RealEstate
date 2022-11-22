@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.App.Interfaces
 {
-    public interface IRolesRepository
+    public interface IRolesRepository: IRepository<AspNetRole>
     {
         AspNetRole? GetByUserId(string userId);
     }

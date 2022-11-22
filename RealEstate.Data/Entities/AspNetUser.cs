@@ -55,5 +55,6 @@ namespace RealEstate.Data.Entities
         [ForeignKey("UserId")]
         [InverseProperty("Users")]
         public virtual ICollection<AspNetRole> Roles { get; set; }
+        public virtual ICollection<Property> Properties { get; set; }
     }
 }

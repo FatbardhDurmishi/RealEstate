@@ -23,8 +23,12 @@ namespace RealEstate.Data.Context
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
+        public virtual DbSet<Property> Properties { get; set; } = null!;
+        public virtual DbSet<PropertyImage> PropertyImages { get; set; } = null!;
+        public virtual DbSet<PropertyType> PropertyTypes { get; set; } = null!;
+        public virtual DbSet<TransactionsType> TransactionsTypes { get; set; } = null!;
 
-
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRole>(entity =>
@@ -64,6 +68,32 @@ namespace RealEstate.Data.Context
             modelBuilder.Entity<AspNetUserToken>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+            });
+
+            modelBuilder.Entity<Property>(entity =>
+            {
+                entity.HasOne(d => d.PropertyTypeNavigation)
+                    .WithMany(p => p.Properties)
+                    .HasForeignKey(d => d.PropertyType)
+                    .HasConstraintName("FK__Propertie__Prope__74AE54BC");
+
+                entity.HasOne(d => d.TransactionTypeNavigation)
+                    .WithMany(p => p.Properties)
+                    .HasForeignKey(d => d.TransactionType)
+                    .HasConstraintName("FK__Propertie__Trans__72C60C4A");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Properties)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__Propertie__UserI__73BA3083");
+            });
+
+            modelBuilder.Entity<PropertyImage>(entity =>
+            {
+                entity.HasOne(d => d.Property)
+                    .WithMany(p => p.PropertyImages)
+                    .HasForeignKey(d => d.PropertyId)
+                    .HasConstraintName("FK__PropertyI__Prope__778AC167");
             });
 
             OnModelCreatingPartial(modelBuilder);

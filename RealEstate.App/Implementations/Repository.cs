@@ -18,6 +18,7 @@ namespace RealEstate.App.Implementations
         {
             _db = db;
             this.dbSet = _db.Set<T>();
+            
         }
 
         public void Add(T entity)

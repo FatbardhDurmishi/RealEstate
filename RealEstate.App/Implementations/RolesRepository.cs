@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace RealEstate.App.Implementations
 {
-    public class RolesRepository : IRolesRepository
+    public class RolesRepository : Repository<AspNetRole>, IRolesRepository
     {
         protected readonly DBRealEstateContext _db;
 
-        public RolesRepository(DBRealEstateContext db)
+        public RolesRepository(DBRealEstateContext db) : base(db)
         {
             _db = db;
         }

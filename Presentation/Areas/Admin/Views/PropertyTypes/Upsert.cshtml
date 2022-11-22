@@ -1,0 +1,58 @@
+﻿@model PropertyTypeVM
+
+<div class="content">
+    <partial name="_Navbar" />
+    <div class="container-fluid pt-4 px-4 col-12 justify-content-between">
+        <div class="row mb-3">
+            <div class="col-10">
+                <ol class="breadcrumb float-sm-right col-10 text-start">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Property Types</a></li>
+                    @if (Model.Id == 0)
+                    {
+                        <li class="breadcrumb-item active">Add</li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item">Edit</li>
+                        <li class="breadcrumb-item active">@Model.Id</li>
+
+                    }
+                </ol>
+            </div>
+            <div class="col-2 text-end">
+                <a asp-area="Admin" asp-controller="PropertyTypes" asp-action="Index" class="btn btn-primary ">Back to list</a>
+            </div>
+        </div>
+        <form asp-area="Admin" asp-controller="PropertyTypes" asp-action="Upsert" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex row">
+
+                <div class="form-floating mb-3  ">
+                    <input type="text" asp-for="Name" class="form-control" id="floatingText" placeholder="text">
+                    <label for="floatingText">&nbsp; Name</label>
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            @if (Model.Id == 0)
+            {
+                <button type="submit" class="btn btn-primary py-3 w-100 mb-4 col-sm-6">Add Property</button>
+
+            }
+            else
+            {
+                <button type="submit" class="btn btn-secondary py-3 w-100 mb-4 col-sm-6">Update</button>
+
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+
