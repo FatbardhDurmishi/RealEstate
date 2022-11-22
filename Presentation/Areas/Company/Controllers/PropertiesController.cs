@@ -9,6 +9,9 @@ using RealEstate.App.Implementations;
 using RealEstate.App.Interfaces;
 using RealEstate.Data.Entities;
 using System.ComponentModel.Design;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Presentation.Areas.Company.Controllers
 {
@@ -69,7 +72,7 @@ namespace Presentation.Areas.Company.Controllers
 
                 var model = new PropertyVM()
                 {
-                    Property = _propertyRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "User,TransactionTypeNavigation,PropertyTypeNavigation"),
+                    Property = _propertyRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "User,TransactionTypeNavigation,PropertyTypeNavigation,PropertyImages"),
                     TransactionList = _transactionTypeRepository.GetAll().Select(i => new SelectListItem
                     {
                         Text = i.Name,
@@ -101,6 +104,7 @@ namespace Presentation.Areas.Company.Controllers
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (model.CoverImage != null)
                 {
+
                     string filename = Guid.NewGuid().ToString();
                     var uploads = Path.Combine(wwwRootPath, @"Images/Property/PropertyCoverPhoto");
                     var extension = Path.GetExtension(model.CoverImage.FileName);
@@ -169,7 +173,7 @@ namespace Presentation.Areas.Company.Controllers
             if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
             {
                 var companyId = _userService.GetUserId();
-                var properties = _propertyRepository.GetAll(x => x.User.CompanyId == companyId, includeProperties: "User,PropertyType,TransactionType");
+                var properties = _propertyRepository.GetAll(x => x.User.CompanyId == companyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation");
                 //var result = propeties.Select(x => new
                 //{
                 //    id = x.Id,
@@ -185,7 +189,7 @@ namespace Presentation.Areas.Company.Controllers
             else
             {
                 var userId = _userService.GetUserId();
-                var properties = _propertyRepository.GetAll(x => x.UserId == userId, includeProperties: "PropertyType,TransactionType");
+                var properties = _propertyRepository.GetAll(x => x.UserId == userId, includeProperties: "PropertyTypeNavigation,TransactionTypeNavigation");
                 //var result = properties.Select(x => new
                 //{
                 //    id = x.Id,
@@ -201,8 +205,39 @@ namespace Presentation.Areas.Company.Controllers
 
             }
 
+
         }
+
+        public IActionResult Details(int propertyId)
+        {
+            Property obj = _propertyRepository.GetFirstOrDefault(x => x.Id == propertyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation,PropertyImages");
+            return View(obj);
+        }
+
         #endregion
+
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+            return destImage;
+        }
     }
 
 }

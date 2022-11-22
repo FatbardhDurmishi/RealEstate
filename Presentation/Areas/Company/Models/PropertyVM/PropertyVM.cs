@@ -16,6 +16,7 @@ namespace Presentation.Areas.Company.Models.PropertyVM
         [ValidateNever]
         public IFormFile CoverImage { get; set; }
         [ValidateNever]
+        //public List<PropertyImage> PopertyImage { get; set; }
         public IFormFileCollection PropertyImages { get; set; }
         //[DisplayName("Choose the Images of your property")]
         //public List<PropertyImageVM> Images { get; set; }

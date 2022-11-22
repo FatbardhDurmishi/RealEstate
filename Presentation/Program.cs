@@ -27,6 +27,10 @@ builder.Services.AddTransient<IPropertyRepository, PropertyRepository>();
 builder.Services.AddTransient<IPropertyTypeRepository, PropertyTypeRepository>();
 builder.Services.AddTransient<ITransactionTypeRepository, TransactionTypeRepository>();
 builder.Services.AddTransient<IPropertyImagesRepository, PropertyImagesRepository>();
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 
 
