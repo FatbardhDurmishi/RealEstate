@@ -25,7 +25,8 @@ namespace Presentation.Areas.Company.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IPropertyTypeRepository _propertyTypeRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public PropertiesController(IPropertyRepository propertyRepository, IUserService userService, ITransactionTypeRepository transactionTypeRepository, IUserRepository userRepository, IPropertyTypeRepository propertyTypeRepository, IWebHostEnvironment webHostEnvironment)
+        private readonly IPropertyImagesRepository _propertyImagesRepository;
+        public PropertiesController(IPropertyRepository propertyRepository, IUserService userService, ITransactionTypeRepository transactionTypeRepository, IUserRepository userRepository, IPropertyTypeRepository propertyTypeRepository, IWebHostEnvironment webHostEnvironment, IPropertyImagesRepository propertyImagesRepository)
         {
             _propertyRepository = propertyRepository;
             _userService = userService;
@@ -33,6 +34,7 @@ namespace Presentation.Areas.Company.Controllers
             _userRepository = userRepository;
             _propertyTypeRepository = propertyTypeRepository;
             _webHostEnvironment = webHostEnvironment;
+            _propertyImagesRepository = propertyImagesRepository;
         }
 
         public IActionResult Index()
@@ -214,30 +216,60 @@ namespace Presentation.Areas.Company.Controllers
             return View(obj);
         }
 
+
+        public IActionResult Delete(int id)
+        {
+            var obj = _propertyRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "PropertyImages");
+            var objImage = _propertyImagesRepository.GetAll(x => x.PropertyId == id);
+
+            if (obj == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            var coverImage = Path.Combine(_webHostEnvironment.WebRootPath, obj.CoverImageUrl.TrimStart('\\'));
+            if (System.IO.File.Exists(coverImage))
+            {
+                System.IO.File.Delete(coverImage);
+            }
+            foreach (var img in obj.PropertyImages)
+            {
+
+                var imgPath = Path.Combine(_webHostEnvironment.WebRootPath, img.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(imgPath))
+                {
+                    System.IO.File.Delete(imgPath);
+                }
+
+            }
+            _propertyImagesRepository.RemoveRange(objImage);
+            _propertyRepository.Remove(obj);
+            return Json(new { success = true, message = "Deleted Successfully" });
+        }
+
         #endregion
 
-        public static Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+        //public static Bitmap ResizeImage(Image image, int width, int height)
+        //{
+        //    var destRect = new Rectangle(0, 0, width, height);
+        //    var destImage = new Bitmap(width, height);
+        //    destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+        //    using (var graphics = Graphics.FromImage(destImage))
+        //    {
+        //        graphics.CompositingMode = CompositingMode.SourceCopy;
+        //        graphics.CompositingQuality = CompositingQuality.HighQuality;
+        //        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        //        graphics.SmoothingMode = SmoothingMode.HighQuality;
+        //        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-            return destImage;
-        }
+        //        using (var wrapMode = new ImageAttributes())
+        //        {
+        //            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+        //            graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+        //        }
+        //    }
+        //    return destImage;
+        //}
     }
 
 }

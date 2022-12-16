@@ -87,9 +87,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
 app.MapControllerRoute(
     name: "MyArea",
-    pattern: "{area:exists}/{controller=Account}/{action=Login}/{id?}");
+    pattern: "{area:exists}/{controller=Account}/{action=Login}/{id?}"
+
+
+    );
+
 
 //SeedDatabase();
 

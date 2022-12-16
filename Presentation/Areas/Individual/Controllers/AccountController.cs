@@ -257,14 +257,6 @@ namespace Presentation.Areas.Individual.Controllers
 
 
             ViewData["ReturnUrl"] = returnUrl;
-            model = new RegisterViewModel()
-            {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-                {
-                    Text = i,
-                    Value = i
-                })
-            };
             return View(model);
         }
 

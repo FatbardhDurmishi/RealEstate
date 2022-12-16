@@ -180,6 +180,7 @@ namespace Presentation.Areas.Admin.Controllers
             return View(model);
         }
 
+
         #region API CALLS
         [HttpGet]
         public IActionResult GetUsersJson()
@@ -188,7 +189,7 @@ namespace Presentation.Areas.Admin.Controllers
             if (_userService.GetUserRole() == RoleConstants.Role_Admin)
             {
                 var userId = _userService.GetUserId();
-                var users = _userRepository.GetAll(x=>x.Id !=userId);
+                var users = _userRepository.GetAll(x => x.Id != userId);
                 var result = users.Select(x => new
                 {
                     id = x.Id,
@@ -230,7 +231,6 @@ namespace Presentation.Areas.Admin.Controllers
             }
 
             _userRepository.Remove(obj);
-            _userRepository.SaveChanges();
             return Json(new { success = true, message = "Deleted Successfully" });
 
         }
