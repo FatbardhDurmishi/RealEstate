@@ -87,19 +87,27 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "MyArea",
-    pattern: "{area:exists}/{controller=Account}/{action=Login}/{id?}"
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "deafultArea",
+        pattern: "{area:exists}/{controller}/{action}/{id?}"
+        );
 
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{area=Individual}/{controller=Account}/{action=Login}/{id?}"
+        );
+});
 
-    );
 
 
 //SeedDatabase();
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.MapRazorPages();
 

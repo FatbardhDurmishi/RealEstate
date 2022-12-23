@@ -16,7 +16,6 @@ namespace Presentation.Areas.Individual.Controllers
 {
     [Authorize]
     [Area(AreaConstants.Individual)]
-    [Route("[area]/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
