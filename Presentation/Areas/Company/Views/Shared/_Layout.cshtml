@@ -1,4 +1,8 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using RealEstate.Data.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,6 +40,7 @@
 </head>
 
 <body>
+@*    <partial name="_Navbar" />*@
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
         @* <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -46,7 +51,11 @@
         <!-- Spinner End -->
         <!-- Sidebar Start -->
         <partial name="_Notification" />
-        <partial name="_Sidebar" />
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <partial name="_Sidebar" />
+
+        }
         <!-- Sidebar End -->
         <!-- Content Start -->
         @RenderBody()

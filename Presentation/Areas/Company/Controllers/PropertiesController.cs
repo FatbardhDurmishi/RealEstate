@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Presentation.Areas.Admin.Models.PropertyTypeVM;
 using Presentation.Areas.Company.Models.PropertyVM;
 using RealEstate.App.Constants;
-using RealEstate.App.Implementations;
 using RealEstate.App.Interfaces;
 using RealEstate.Data.Entities;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 
 namespace Presentation.Areas.Company.Controllers
 {
@@ -209,7 +202,8 @@ namespace Presentation.Areas.Company.Controllers
 
 
         }
-
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Details(int propertyId)
         {
             Property obj = _propertyRepository.GetFirstOrDefault(x => x.Id == propertyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation,PropertyImages");

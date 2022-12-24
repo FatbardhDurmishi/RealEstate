@@ -2,22 +2,27 @@
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
 using RealEstate.App.Constants;
+using RealEstate.App.Interfaces;
 
 namespace Presentation.Areas.Individual.Controllers
 {
     [Area(AreaConstants.Individual)]
     public class HomeController : Controller
     {
+        private readonly IPropertyRepository _propertyRepository;
+
+        public HomeController(IPropertyRepository propertyRepository)
+        {
+            _propertyRepository = propertyRepository;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var properties = _propertyRepository.GetAll(x => x.Status == PropertyStatus.Free,includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation");
+            return View(properties);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
+  
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

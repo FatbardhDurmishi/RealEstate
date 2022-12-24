@@ -1,15 +1,35 @@
 ﻿@model RealEstate.Data.Entities.Property
+@using RealEstate.App.Interfaces;
+@inject IUserService userService
+@using Microsoft.AspNetCore.Identity
+@using RealEstate.Data.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
-<div class="content">
+@{
+    var open = "";
+    if (SignInManager.IsSignedIn(User))
+    {
+        open = "content";
+    }
+    else
+    {
+        open = "content open";
+    }
+
+
+}
+<div class="@open">
     <partial name="_Navbar" />
-    <div class="container-fluid pt-4 px-4 col-12">
+
+    @*<div class="container-fluid pt-4 px-4 col-12">
         <input type="hidden" asp-for="Id" />
         <!-- Content Header (Page header) -->
         <div class="row">
             @* <div class="col-sm-6 col-xl-3 ">
             @*<h1>Users</h1>
             </div>*@
-            <div class="col-6">
+          @*  <div class="col-6">
                 <ol class="breadcrumb float-sm-right col-6 text-start ">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Properties</a></li>
@@ -21,37 +41,34 @@
                 <a asp-area="Company" asp-action="Index" asp-controller="Properties" class="btn btn-secondary">Back to list</a>
             </div>
         </div>
-    </div>
+    </div>*@
 
-    <div class="container-fluid pt-4 px-4 col-12">
-        <div id="carouselExampleIndicators" class="carousel slide mb-4" data-bs-ride="true">
-            <div class="carousel-indicators">
+    <div class="container-fluid pt-4  col-12">
+        <div class="d-flex justify-content-center align-items-center">
+            <div id="carouselExampleIndicators" style="width:500px" class="carousel slide mb-4 " data-bs-ride="true">
 
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <div class="carousel-inner">
+                    @{
+                        int i = 0;
+                    }
+                    @foreach (var img in Model.PropertyImages)
+                    {
+                        i++;
+                        var active = i == 1 ? "active" : "";
+                        <div class="carousel-item w-100 @active">
+                            <img src="@img.ImageUrl" class="d-block w-100 img-fluid" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <div class="carousel-inner">
-                @{
-                    int i = 0;
-                }
-                @foreach (var img in Model.PropertyImages)
-                {
-                    i++;
-                    var active = i == 1 ? "active" : "";
-                    <div class="carousel-item w-100 @active">
-                        <img src="@img.ImageUrl" class="d-block w-100 img-fluid" style="height:400px;object-fit:contain" alt="...">
-                    </div>
-                }
-            </div>
-            <button class="carousel-control-prev" style="color:#333;" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon-" aria-hidden="false"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="false"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
         <div class="card container mb-4">
             <div class="card-header bg-secondary text-light row">

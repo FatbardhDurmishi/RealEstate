@@ -1,8 +1,90 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Property>
+@using Microsoft.AspNetCore.Identity
+@using RealEstate.Data.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="content">
+
+        <partial name="_Navbar" />
+        <div class="container-fluid pt-4 px-4 col-12">
+
+            <div class="row pb-3 px-2 w-100">
+                @foreach (var property in Model)
+                {
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="row p-2">
+                            <div class="col-12 p-1" style="border:1px solid #008cba; border-radius:5px;">
+                                <div class="card">
+                                    <img src="@property.CoverImageUrl" class="card-img-top rounded" style="width:100%; aspect-ratio:1/1;" />
+
+                                    <div class="card-body">
+                                        <div class="pl-1">
+                                            <p class="card-title h5 text-primary">@property.Name</p>
+                                            <p class="card-title text-info"><b>@property.Price.ToString("c")</b></p>
+                                        </div>
+                                        <div class="pl-1">
+                                            <p>BedRooms: @property.BedRooms</p>
+                                        </div>
+                                        <div class="pl-1">
+                                            <p>BathRooms: @property.BathRooms<b></b></p>
+                                        </div>
+                                        <div class="pl-1">
+                                            <p>Area: @property.Area (in m&sup2;) <b></b></p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+
+    <div class="row pb-3 px-2 w-100">
+        @foreach (var property in Model)
+        {
+
+            <div class="col-lg-3 col-md-6">
+                <div class="row p-2">
+                    <div class="col-12 p-1" style="border:1px solid #008cba; border-radius:5px;">
+                        <div class="card">
+                            <img src="@property.CoverImageUrl" class="card-img-top rounded" style="width:100%; aspect-ratio:1/1;" />
+
+                            <div class="card-body">
+                                <div class="pl-1">
+                                    <p class="card-title h5 text-primary">@property.Name</p>
+                                    <p class="card-title text-info"><b>@property.Price.ToString("c")</b></p>
+                                </div>
+                                <div class="pl-1">
+                                    <p>BedRooms: @property.BedRooms</p>
+                                </div>
+                                <div class="pl-1">
+                                    <p>BathRooms: @property.BathRooms<b></b></p>
+                                </div>
+                                <div class="pl-1">
+                                    <p>Area: @property.Area (in m&sup2;) <b></b></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
