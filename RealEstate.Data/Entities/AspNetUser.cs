@@ -14,6 +14,9 @@ namespace RealEstate.Data.Entities
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetUserTokens = new HashSet<AspNetUserToken>();
+            Properties = new HashSet<Property>();
+            TransactionBuyers = new HashSet<Transaction>();
+            TransactionOwners = new HashSet<Transaction>();
             Roles = new HashSet<AspNetRole>();
         }
 
@@ -51,10 +54,15 @@ namespace RealEstate.Data.Entities
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<Property> Properties { get; set; }
+        [InverseProperty("Buyer")]
+        public virtual ICollection<Transaction> TransactionBuyers { get; set; }
+        [InverseProperty("Owner")]
+        public virtual ICollection<Transaction> TransactionOwners { get; set; }
 
         [ForeignKey("UserId")]
         [InverseProperty("Users")]
         public virtual ICollection<AspNetRole> Roles { get; set; }
-        public virtual ICollection<Property> Properties { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using RealEstate.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Presentation.Areas.Company.Models.PropertyVM
 {
@@ -14,12 +16,18 @@ namespace Presentation.Areas.Company.Models.PropertyVM
         [ValidateNever]
         public IEnumerable<SelectListItem> PropertyTypeList { get; set; }
         [ValidateNever]
+        [DisplayName("Choose the cover Image of your property")]
         public IFormFile CoverImage { get; set; }
         [ValidateNever]
         //public List<PropertyImage> PopertyImage { get; set; }
+        [DisplayName("Choose the Images of your Property")]
         public IFormFileCollection PropertyImages { get; set; }
+        [ValidateNever]
+        [BindNever]
+        public int[] DeleteImageIdArr { get; set; } =new int[0];
         //[DisplayName("Choose the Images of your property")]
         //public List<PropertyImageVM> Images { get; set; }
+
     }
 }
 //[Key]

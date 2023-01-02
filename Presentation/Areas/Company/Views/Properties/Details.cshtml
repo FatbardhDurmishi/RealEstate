@@ -19,135 +19,273 @@
 
 
 }
-<div class="@open">
-    <partial name="_Navbar" />
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="@open">
+        <partial name="_Navbar" />
 
-    @*<div class="container-fluid pt-4 px-4 col-12">
-        <input type="hidden" asp-for="Id" />
-        <!-- Content Header (Page header) -->
-        <div class="row">
-            @* <div class="col-sm-6 col-xl-3 ">
-            @*<h1>Users</h1>
-            </div>*@
-          @*  <div class="col-6">
-                <ol class="breadcrumb float-sm-right col-6 text-start ">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Properties</a></li>
-                    <li class="breadcrumb-item active">Details</li>
-                    <li class="breadcrumb-item active">@Model.Id</li>
-                </ol>
-            </div>
-            <div class="col-6 text-end">
-                <a asp-area="Company" asp-action="Index" asp-controller="Properties" class="btn btn-secondary">Back to list</a>
-            </div>
-        </div>
+        @*<div class="container-fluid pt-4 px-4 col-12">
+    <input type="hidden" asp-for="Id" />
+    <!-- Content Header (Page header) -->
+    <div class="row">
+    @* <div class="col-sm-6 col-xl-3 ">
+    @*<h1>Users</h1>
+    </div>*@
+        @*  <div class="col-6">
+    <ol class="breadcrumb float-sm-right col-6 text-start ">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item"><a href="#">Properties</a></li>
+    <li class="breadcrumb-item active">Details</li>
+    <li class="breadcrumb-item active">@Model.Id</li>
+    </ol>
+    </div>
+    <div class="col-6 text-end">
+    <a asp-area="Company" asp-action="Index" asp-controller="Properties" class="btn btn-secondary">Back to list</a>
+    </div>
+    </div>
     </div>*@
 
-    <div class="container-fluid pt-4  col-12">
-        <div class="d-flex justify-content-center align-items-center">
-            <div id="carouselExampleIndicators" style="width:500px" class="carousel slide mb-4 " data-bs-ride="true">
+        <div class="container-fluid pt-4  col-12">
+            <div class="d-flex justify-content-center align-items-center">
+                <div id="carouselExampleIndicators" style="width:500px" class="carousel slide mb-4 " data-bs-ride="true">
 
-                <div class="carousel-inner">
-                    @{
-                        int i = 0;
-                    }
-                    @foreach (var img in Model.PropertyImages)
-                    {
-                        i++;
-                        var active = i == 1 ? "active" : "";
-                        <div class="carousel-item w-100 @active">
-                            <img src="@img.ImageUrl" class="d-block w-100 img-fluid" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
+                    <div class="carousel-inner">
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var img in Model.PropertyImages)
+                        {
+                            i++;
+                            var active = i == 1 ? "active" : "";
+                            <div class="carousel-item w-100 @active">
+                                <img src="@img.ImageUrl" class="d-block w-100 img-fluid img-responsive" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="card container mb-4">
+                <div class="card-header bg-secondary text-light row">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <h1 class="text-white">@Model.Name</h1>
                         </div>
-                    }
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-        <div class="card container mb-4">
-            <div class="card-header bg-secondary text-light row">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <h1 class="text-white">@Model.Name</h1>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-12 col-md-6">
+                            <h1 class="text-white">@Model.Price.ToString("c")</h1>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="card-body row container">
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6">
+                            <h5 class="text-black">Description:</h5>
+                            <p class="text-black-50">@Model.Description</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">BedRooms: <span class="text-black-50">@Model.BedRooms</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">BathRooms: <span class="text-black-50">@Model.BathRooms</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Area(in m&sup2;): <span class="text-black-50">@Model.Area</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Status: <span class="text-black-50">@Model.Status</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Property Type: <span class="text-black-50">@Model.PropertyTypeNavigation.Name</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Transaction Type: <span class="text-black-50">@Model.TransactionTypeNavigation.Name</span></h5>
+                        </div>
+                    </div>
+                    <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
                     <div class="col-12 col-md-6">
-                        <h1 class="text-white">@Model.Price.ToString("c")</h1>
+                        <h1 class="text-black-50">Location</h1>
                     </div>
-                </div>
-            </div>
-            <div class="card-body row container">
 
-                <div class="row mb-3">
+                    <div class="row  mb-3 mt-3">
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black">State: <span class="text-black-50">@Model.State</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">City: <span class="text-black-50">@Model.City</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-12 mt-2">
+                            <h5 class="text-black">StreetAddress: <span class="text-black-50">@Model.StreetAddress</span></h5>
+                        </div>
+                    </div>
+                    <hr style="height:3px;border:none;color:#333;background-color:#333;" />
                     <div class="col-12 col-md-6">
-                        <h5 class="text-black">Description:</h5>
-                        <p class="text-black-50">@Model.Description</p>
-                    </div>
-                </div>
+                        <h1 class="text-black-50">Contact</h1>
 
-                <div class="row mb-3">
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">BedRooms: <span class="text-black-50">@Model.BedRooms</span></h5>
                     </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">BathRooms: <span class="text-black-50">@Model.BathRooms</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">Area(in m&sup2;): <span class="text-black-50">@Model.Area</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">Status: <span class="text-black-50">@Model.Status</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">Property Type: <span class="text-black-50">@Model.PropertyTypeNavigation.Name</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">Transaction Type: <span class="text-black-50">@Model.TransactionTypeNavigation.Name</span></h5>
-                    </div>
-                </div>
-                <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
-                <div class="col-12 col-md-6">
-                    <h1 class="text-black-50">Location</h1>
-                </div>
-
-                <div class="row  mb-3 mt-3">
-                    <div class="col-lg-3 col-sm-6 mt-2 ">
-                        <h5 class="text-black">State: <span class="text-black-50">@Model.State</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2">
-                        <h5 class="text-black">City: <span class="text-black-50">@Model.City</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-12 mt-2">
-                        <h5 class="text-black">StreetAddress: <span class="text-black-50">@Model.StreetAddress</span></h5>
-                    </div>
-                </div>
-                <hr style="height:3px;border:none;color:#333;background-color:#333;" />
-                <div class="col-12 col-md-6">
-                    <h1 class="text-black-50">Contact</h1>
-
-                </div>
-
-                <div class="row mb-3 mt-3">
-                    <div class="col-lg-3 col-sm-6 mt-2 ">
-                        <h5 class="text-black">Agent: <span class="text-black-50">@Model.User.Name</span></h5>
-                    </div>
-                    <div class="col-lg-5 col-sm-6 mt-2 ">
-                        <h5 class="text-black">Email: <span class="text-black-50">@Model.User.Email</span></h5>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 mt-2 ">
-                        <h5 class="text-black text-start">PhoneNumber: <span class="text-black-50">@Model.User.PhoneNumber</span></h5>
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black">Agent: <span class="text-black-50">@Model.User.Name</span></h5>
+                        </div>
+                        <div class="col-lg-5 col-sm-6 mt-2 ">
+                            <h5 class="text-black">Email: <span class="text-black-50">@Model.User.Email</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black text-start">PhoneNumber: <span class="text-black-50">@Model.User.PhoneNumber</span></h5>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="@open">
+        <partial name="_Navbar" />
+
+        @*<div class="container-fluid pt-4 px-4 col-12">
+    <input type="hidden" asp-for="Id" />
+    <!-- Content Header (Page header) -->
+    <div class="row">
+    @* <div class="col-sm-6 col-xl-3 ">
+    @*<h1>Users</h1>
+    </div>*@
+        @*  <div class="col-6">
+    <ol class="breadcrumb float-sm-right col-6 text-start ">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item"><a href="#">Properties</a></li>
+    <li class="breadcrumb-item active">Details</li>
+    <li class="breadcrumb-item active">@Model.Id</li>
+    </ol>
+    </div>
+    <div class="col-6 text-end">
+    <a asp-area="Company" asp-action="Index" asp-controller="Properties" class="btn btn-secondary">Back to list</a>
+    </div>
+    </div>
+    </div>*@
+
+        <div class="container-fluid pt-4  col-12">
+            <div class="d-flex justify-content-center align-items-center">
+                <div id="carouselExampleIndicators" style="width:500px" class="carousel slide mb-4 " data-bs-ride="true">
+
+                    <div class="carousel-inner">
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var img in Model.PropertyImages)
+                        {
+                            i++;
+                            var active = i == 1 ? "active" : "";
+                            <div class="carousel-item w-100 @active">
+                                <img src="@img.ImageUrl" class="d-block w-100 img-fluid" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="card container mb-4">
+                <div class="card-header bg-secondary text-light row">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <h1 class="text-white">@Model.Name</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-12 col-md-6">
+                            <h1 class="text-white">@Model.Price.ToString("c")</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body row container">
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6">
+                            <h5 class="text-black">Description:</h5>
+                            <p class="text-black-50">@Model.Description</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">BedRooms: <span class="text-black-50">@Model.BedRooms</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">BathRooms: <span class="text-black-50">@Model.BathRooms</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Area(in m&sup2;): <span class="text-black-50">@Model.Area</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Status: <span class="text-black-50">@Model.Status</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Property Type: <span class="text-black-50">@Model.PropertyTypeNavigation.Name</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">Transaction Type: <span class="text-black-50">@Model.TransactionTypeNavigation.Name</span></h5>
+                        </div>
+                    </div>
+                    <hr style="height:3px;border:none;color:#333;background-color:#333;" />
+
+                    <div class="col-12 col-md-6">
+                        <h1 class="text-black-50">Location</h1>
+                    </div>
+
+                    <div class="row  mb-3 mt-3">
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black">State: <span class="text-black-50">@Model.State</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2">
+                            <h5 class="text-black">City: <span class="text-black-50">@Model.City</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-12 mt-2">
+                            <h5 class="text-black">StreetAddress: <span class="text-black-50">@Model.StreetAddress</span></h5>
+                        </div>
+                    </div>
+                    <hr style="height:3px;border:none;color:#333;background-color:#333;" />
+                    <div class="col-12 col-md-6">
+                        <h1 class="text-black-50">Contact</h1>
+
+                    </div>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black">Agent: <span class="text-black-50">@Model.User.Name</span></h5>
+                        </div>
+                        <div class="col-lg-5 col-sm-6 mt-2 ">
+                            <h5 class="text-black">Email: <span class="text-black-50">@Model.User.Email</span></h5>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mt-2 ">
+                            <h5 class="text-black text-start">PhoneNumber: <span class="text-black-50">@Model.User.PhoneNumber</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

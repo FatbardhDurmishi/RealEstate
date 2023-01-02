@@ -17,8 +17,7 @@ namespace RealEstate.App.Implementations
         public Repository(DBRealEstateContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<T>();          
-            
+            this.dbSet = _db.Set<T>();
         }
 
         public void Add(T entity)

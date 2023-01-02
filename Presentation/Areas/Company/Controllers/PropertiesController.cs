@@ -150,6 +150,21 @@ namespace Presentation.Areas.Company.Controllers
                 }
                 else
                 {
+
+                    if (model.DeleteImageIdArr.Count() > 0)
+                    {
+                        foreach (var id in model.DeleteImageIdArr)
+                        {
+
+                            var image = _propertyImagesRepository.GetFirstOrDefault(x => x.Id == id);
+                            var oldImagePath = Path.Combine(wwwRootPath, image.ImageUrl.TrimStart('\\'));
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                            _propertyImagesRepository.Remove(image);
+                        }
+                    }
                     _propertyRepository.Update(model.Property);
                     TempData["success"] = "Property updated successfully";
                     return RedirectToAction(nameof(Index));
@@ -159,6 +174,23 @@ namespace Presentation.Areas.Company.Controllers
 
             return View(model);
         }
+        //public void DeleteImage(string ImageUrl)
+        //{
+        //    string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+        //    if (ImageUrl != null)
+        //    {
+        //        var oldImagePath = Path.Combine(wwwRootPath, ImageUrl.TrimStart('\\'));
+        //        if (System.IO.File.Exists(oldImagePath))
+        //        {
+        //            System.IO.File.Delete(oldImagePath);
+        //        }
+        //        var image = _propertyImagesRepository.GetFirstOrDefault(x => x.ImageUrl == ImageUrl);
+        //        _propertyImagesRepository.Remove(image);
+        //    }
+
+        //}
+
 
 
         #region API CALLS

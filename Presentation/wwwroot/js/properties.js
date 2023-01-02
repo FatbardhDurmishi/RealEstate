@@ -19,7 +19,7 @@ function loadDataTable() {
             dataSrc: ""
         },
         columns: [
-            {data:"id", title:"Id"},
+            { data: "id", title: "Id" },
             { data: "name", title: "Name" },
             { data: "user.name", title: "Agent", },
             { data: "user.email", title: "Agent Email" },

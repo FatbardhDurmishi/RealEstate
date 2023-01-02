@@ -22,4 +22,8 @@
     <ProjectReference Include="..\RealEstate.Utilites\RealEstate.Utilites.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Context\" />
+  </ItemGroup>
+
 </Project>

@@ -26,9 +26,11 @@ namespace RealEstate.Data.Context
         public virtual DbSet<Property> Properties { get; set; } = null!;
         public virtual DbSet<PropertyImage> PropertyImages { get; set; } = null!;
         public virtual DbSet<PropertyType> PropertyTypes { get; set; } = null!;
+        public virtual DbSet<Transaction> Transactions { get; set; } = null!;
         public virtual DbSet<TransactionsType> TransactionsTypes { get; set; } = null!;
 
        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRole>(entity =>
@@ -94,6 +96,24 @@ namespace RealEstate.Data.Context
                     .WithMany(p => p.PropertyImages)
                     .HasForeignKey(d => d.PropertyId)
                     .HasConstraintName("FK__PropertyI__Prope__778AC167");
+            });
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.HasOne(d => d.Buyer)
+                    .WithMany(p => p.TransactionBuyers)
+                    .HasForeignKey(d => d.BuyerId)
+                    .HasConstraintName("FK__Transacti__Buyer__2DE6D218");
+
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.TransactionOwners)
+                    .HasForeignKey(d => d.OwnerId)
+                    .HasConstraintName("FK__Transacti__Owner__2CF2ADDF");
+
+                entity.HasOne(d => d.Property)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.PropertyId)
+                    .HasConstraintName("FK__Transacti__Prope__2EDAF651");
             });
 
             OnModelCreatingPartial(modelBuilder);

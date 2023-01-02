@@ -27,7 +27,8 @@ builder.Services.AddTransient<IPropertyRepository, PropertyRepository>();
 builder.Services.AddTransient<IPropertyTypeRepository, PropertyTypeRepository>();
 builder.Services.AddTransient<ITransactionTypeRepository, TransactionTypeRepository>();
 builder.Services.AddTransient<IPropertyImagesRepository, PropertyImagesRepository>();
-builder.Services.AddControllersWithViews()
+builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
