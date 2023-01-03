@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace RealEstate.Data.Entities
 {
@@ -18,17 +15,18 @@ namespace RealEstate.Data.Entities
         public string? BuyerId { get; set; }
         public int? PropertyId { get; set; }
         [Column(TypeName = "datetime")]
-        [Required]
         public DateTime? RentStartDate { get; set; }
         [Column(TypeName = "datetime")]
         [Required]
         public DateTime? RentEndDate { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
+        [Required]
         public decimal? RentPrice { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal? TotalPrice { get; set; }
         [StringLength(50)]
         public string? Status { get; set; }
+        public int? TransactionType { get; set; }
 
         [ForeignKey("BuyerId")]
         [InverseProperty("TransactionBuyers")]
@@ -39,5 +37,8 @@ namespace RealEstate.Data.Entities
         [ForeignKey("PropertyId")]
         [InverseProperty("Transactions")]
         public virtual Property? Property { get; set; }
+        [ForeignKey("TransactionType")]
+        [InverseProperty("Transactions")]
+        public virtual TransactionsType? TransactionTypeNavigation { get; set; }
     }
 }

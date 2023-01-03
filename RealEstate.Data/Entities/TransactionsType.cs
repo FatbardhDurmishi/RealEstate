@@ -11,6 +11,7 @@ namespace RealEstate.Data.Entities
         public TransactionsType()
         {
             Properties = new HashSet<Property>();
+            Transactions = new HashSet<Transaction>();
         }
 
         [Key]
@@ -20,5 +21,7 @@ namespace RealEstate.Data.Entities
 
         [InverseProperty("TransactionTypeNavigation")]
         public virtual ICollection<Property> Properties { get; set; }
+        [InverseProperty("TransactionTypeNavigation")]
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

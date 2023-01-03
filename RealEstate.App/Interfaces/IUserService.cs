@@ -14,5 +14,6 @@ namespace RealEstate.App.Interfaces
         string GetUserPhoneNumber();
         string GetUserRole();
         string GetFullName();
+        string GetUserCompanyId();
     }
 }

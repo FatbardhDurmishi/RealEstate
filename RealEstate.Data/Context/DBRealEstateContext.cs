@@ -29,7 +29,6 @@ namespace RealEstate.Data.Context
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
         public virtual DbSet<TransactionsType> TransactionsTypes { get; set; } = null!;
 
-       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -114,6 +113,11 @@ namespace RealEstate.Data.Context
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.PropertyId)
                     .HasConstraintName("FK__Transacti__Prope__2EDAF651");
+
+                entity.HasOne(d => d.TransactionTypeNavigation)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.TransactionType)
+                    .HasConstraintName("FK__Transacti__Trans__2FCF1A8A");
             });
 
             OnModelCreatingPartial(modelBuilder);

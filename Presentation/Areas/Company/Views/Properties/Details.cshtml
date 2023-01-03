@@ -1,4 +1,5 @@
-﻿@model RealEstate.Data.Entities.Property
+﻿@model Property
+@using RealEstate.App.Constants;
 @using RealEstate.App.Interfaces;
 @inject IUserService userService
 @using Microsoft.AspNetCore.Identity
@@ -6,8 +7,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
 @{
     var open = "";
+    var content = "";
     if (SignInManager.IsSignedIn(User))
     {
         open = "content";
@@ -15,6 +18,15 @@
     else
     {
         open = "content open";
+    }
+
+    if (Model.TransactionTypeNavigation.Name == TransactionTypes.Rent)
+    {
+        content = "Rent Property";
+    }
+    else
+    {
+        content = "Buy Property";
     }
 
 
@@ -46,6 +58,34 @@
     </div>*@
 
         <div class="container-fluid pt-4  col-12">
+            @if (userService.GetUserId() != Model.UserId)
+            {
+
+                <div class="container-fluid pt-4 px-4 col-12 mb-4">
+                    <!-- Content Header (Page header) -->
+                    <div class="row">
+                        @* <div class="col-sm-6 col-xl-3 ">
+                @*<h1>Users</h1>
+                </div>*@
+                        <div class="col-6">
+                            <a asp-area="Company" asp-action="AddTransaction" asp-controller="Transaction" asp-route-propertyId="@Model.Id" class="btn btn-primary">&nbsp;@content</a>
+                        </div>
+                       @* <div class="col-6 text-end">
+                            <a asp-area="Company" asp-action="RequestProperty" asp-controller="Transaction" class="btn btn-secondary">&nbsp;@content</a>
+                        </div>*@
+                    </div>
+                </div>
+            }
+            @* <div class="row mb-2">
+        <div class="col-6 col-sm-3 text start">
+        <a asp-area="Company" asp-action="RequestProperty" asp-controller="Transaction" class="btn btn-primary">&nbsp;@content</a>
+        </div>
+        <div class="col-6 col-sm-3 text-end">
+        <a asp-area="Company" asp-action="RequestProperty" asp-controller="Transaction" class="btn btn-primary">&nbsp;@content</a>
+
+        </div>
+
+        </div>*@
             <div class="d-flex justify-content-center align-items-center">
                 <div id="carouselExampleIndicators" style="width:500px" class="carousel slide mb-4 " data-bs-ride="true">
 
@@ -85,6 +125,9 @@
                             <h1 class="text-white">@Model.Price.ToString("c")</h1>
                         </div>
                     </div>
+                    <span class="text-end justify-content-center">
+                        <a asp-area="Company" asp-action="AddTransaction" asp-controller="Transaction" asp-route-propertyId="@Model.Id" class="btn btn-primary">&nbsp;@content</a>
+                    </span>
                 </div>
                 <div class="card-body row container">
 

@@ -113,5 +113,17 @@ namespace RealEstate.App.Implementations
                 return "";
             }
         }
+
+        public string GetUserCompanyId()
+        {
+            if(CurrentUser!= null)
+            {
+                return CurrentUser.CompanyId;
+            }
+            else
+            {
+                return " ";
+            }
+        }
     }
 }

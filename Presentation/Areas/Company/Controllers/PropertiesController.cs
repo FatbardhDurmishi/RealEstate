@@ -171,8 +171,13 @@ namespace Presentation.Areas.Company.Controllers
 
                 }
             }
+            else
+            {
+                TempData["error"] = "Something went wrong! Try Again";
+                return View(model);
+            }
 
-            return View(model);
+
         }
         //public void DeleteImage(string ImageUrl)
         //{
