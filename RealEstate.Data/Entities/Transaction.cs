@@ -15,12 +15,11 @@ namespace RealEstate.Data.Entities
         public string? BuyerId { get; set; }
         public int? PropertyId { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? RentStartDate { get; set; }
+        public DateTime RentStartDate { get; set; } = DateTime.Now;
         [Column(TypeName = "datetime")]
         [Required]
-        public DateTime? RentEndDate { get; set; }
+        public DateTime RentEndDate { get; set; } = DateTime.Now;
         [Column(TypeName = "decimal(18, 2)")]
-        [Required]
         public decimal? RentPrice { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal? TotalPrice { get; set; }
@@ -40,5 +39,7 @@ namespace RealEstate.Data.Entities
         [ForeignKey("TransactionType")]
         [InverseProperty("Transactions")]
         public virtual TransactionsType? TransactionTypeNavigation { get; set; }
+        [NotMapped]
+        public bool ShowButtons = false;
     }
 }

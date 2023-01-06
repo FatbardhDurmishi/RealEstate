@@ -1,4 +1,5 @@
-﻿var dataTable;
+﻿
+var dataTable;
 
 $(document).ready(function () {
     loadDataTable();
@@ -23,20 +24,28 @@ function loadDataTable() {
             { data: "owner.name", title: "Seller" },
             { data: "buyer.name", title: "Buyer", },
             { data: "rentPrice", title: "Rent Price" },
-            { data: "property.name", title: "Property Type" },
+            { data: "property.transactionTypeNavigation.name", title: "Property Type" },
             { data: "transactionTypeNavigation.name", title: "Transaction Type" },
             { data: "totalPrice", title: "Total Price" },
             { data: "status", title: "Status" },
             {
-                data: "id", title: "Actions",
+                data: { id: "id", showButtons: "showButtons", title: "Actions" },
+
                 render: function (data) {
-                    return `
+                    if (data.showButtons == true) {
+                        return `
                           <div class="w-75 btn-group align-items-center" role="group">
-                            <a href="/Company/Properties/Upsert?id=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
-                            <a onClick=Delete('/Company/Properties/Delete/${data}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
-                            <a href="/Company/Properties/Details?propertyId=${data}" class="btn btn-secondary mx-2"><i class="bi bi-eye"></i></a>
+                            <a href="/Company/Transaction/ApproveRequest?id=${data.id}" class="btn btn-primary mx-2"><i class="fa-solid fa-check"></i></a>
+                            <a href="/Company/Transaction/RejectRequest?id=${data.id}" class="btn btn-danger mx-2"><i class="fa-solid fa-xmark"></i></a>
+                            <a href="/Company/Transaction/Details?id=${data.id}" class="btn btn-secondary mx-2"><i class="fa-regular fa-circle-info"></i></a>
                         </div>
                             `
+                    } else {
+                        return ` 
+                        <div class="w-50 btn-group align-items-center" role="group">
+                            <a href="/Company/Transaction/Details?id=${data.id}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
+                        </div>`;
+                    }
                 }
             },
 

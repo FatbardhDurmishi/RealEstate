@@ -64,7 +64,7 @@ function Delete(url) {
         if (result.isConfirmed) {
             $.ajax({
                 url: url,
-                type:'DELETE',
+                type: 'DELETE',
                 success: function (data) {
                     if (data.success) {
                         dataTable.ajax.reload();

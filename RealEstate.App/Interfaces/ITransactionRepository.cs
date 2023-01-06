@@ -1,13 +1,12 @@
-﻿using RealEstate.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RealEstate.Data.Context;
+using RealEstate.Data.Entities;
+
+
 
 namespace RealEstate.App.Interfaces
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {
+      string UpdateStatus(Transaction transaction,string status);
     }
 }

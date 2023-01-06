@@ -46,7 +46,7 @@ function loadDataTable() {
                           <div class="w-75 btn-group align-items-center" role="group">
                             <a href="/Company/Properties/Upsert?id=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
                             <a onClick=Delete('/Company/Properties/Delete/${data}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
-                            <a href="/Company/Properties/Details?propertyId=${data}" class="btn btn-secondary mx-2"><i class="bi bi-eye"></i></a>
+                            <a href="/Company/Properties/Details?propertyId=${data}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
                         </div>
                             `
                 }

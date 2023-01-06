@@ -17,5 +17,11 @@ namespace RealEstate.App.Implementations
         {
             _db = db;
         }
+
+        public string UpdateStatus(Transaction transaction, string status)
+        {
+            transaction.Status = status;
+            return status;
+        }
     }
 }
