@@ -57,6 +57,11 @@ namespace Presentation.Areas.Company.Controllers
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()
+                    }),
+                    Cities = CityConstants._cities.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Name
                     })
                 };
 
@@ -83,7 +88,14 @@ namespace Presentation.Areas.Company.Controllers
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()
+                    }),
+                    Cities = CityConstants._cities.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Name
                     })
+
+
                 };
                 return View(model);
             }
@@ -179,6 +191,11 @@ namespace Presentation.Areas.Company.Controllers
 
 
         }
+
+        //public IActionResult FilterProperties(string? city,int? bedrooms, int? bathrooms,decimal? minPrice,decimal? maxPrice)
+        //{
+
+        //}
         //public void DeleteImage(string ImageUrl)
         //{
         //    string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -199,6 +216,7 @@ namespace Presentation.Areas.Company.Controllers
 
 
         #region API CALLS
+        [HttpGet]
         public IActionResult GetPropertiesJson()
         {
 
@@ -206,33 +224,15 @@ namespace Presentation.Areas.Company.Controllers
             {
                 var companyId = _userService.GetUserId();
                 var properties = _propertyRepository.GetAll(x => x.User.CompanyId == companyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation");
-                //var result = propeties.Select(x => new
-                //{
-                //    id = x.Id,
-                //    name = x.Name,
-                //    user = x.User.Name,
-                //    propertyType = x.PropertyTypeNavigation.Name,
-                //    transactionType = x.TransactionTypeNavigation.Name,
-                //    price = x.Price,
-                //    status = x.Status
-                //});
+
+
                 return Json(properties);
             }
             else
             {
                 var userId = _userService.GetUserId();
                 var properties = _propertyRepository.GetAll(x => x.UserId == userId, includeProperties: "PropertyTypeNavigation,TransactionTypeNavigation");
-                //var result = properties.Select(x => new
-                //{
-                //    id = x.Id,
-                //    name = x.Name,
-                //    user = x.User.Name,
-                //    propertyType = x.PropertyTypeNavigation.Name,
-                //    transactionType = x.TransactionTypeNavigation.Name,
-                //    price = x.Price,
-                //    status = x.Status
 
-                //});
                 return Json(properties);
 
             }

@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="form-floating mb-3 col-sm-6">
-                    <input asp-for="Property.City" class="form-control" id="floatingText">
+                    <select class="form-select" asp-for="Property.City" asp-items="@Model.Cities" id="floatingText"></select>
                     <label for="floatingText">&nbsp; City</label>
                     <span asp-validation-for="@Model.Property.City" class="text-danger"></span>
                 </div>
@@ -135,7 +135,7 @@
                             @*id = "thumb-input-24-init-0"*@
                             <input type="hidden" asp-for="@image.Id" />
 
-                            <div id="@image.Id" class="file-preview-frame krajee-default  file-preview-initial file-sortable kv-preview-thumb rotatable"  data-fileindex="init-0" data-fileid="thumb-input-25-init-0" data-filename="MoonFull.jpg" data-template="image" data-zoom="http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fe%2Fe1%2FFullMoon2010.jpg%2F631px-FullMoon2010.jpg">
+                            <div id="@image.Id" class="file-preview-frame krajee-default  file-preview-initial file-sortable kv-preview-thumb rotatable" data-fileindex="init-0" data-fileid="thumb-input-25-init-0" data-filename="MoonFull.jpg" data-template="image" data-zoom="http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fe%2Fe1%2FFullMoon2010.jpg%2F631px-FullMoon2010.jpg">
 
                                 <div class="kv-file-content">
                                     <img src="@image.ImageUrl" class="file-preview-image kv-preview-data" style="width: auto; height: auto; max-width: 100%; max-height: 100%;">
@@ -192,25 +192,25 @@
         <script src="https://cdn.tiny.cloud/1/8nmp0h00j9mvwkmze0o0mof0lkhqm77c6afbdp31ne2leuc4/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     }
     <script>
-        function HideImage(v){
+        function HideImage(v) {
             var img = document.getElementById(v)
             img.style.visibility = "hidden";
             var arr = [];
             arr.push(v);
             $('#DeleteImageIdArr').val(JSON.parse(arr));
-          
-            
-            
+
+
+
             console.log(v)
             console.log(id)
 
         }
     </script>
-   @* <script>
+    @* <script>
         $(document).ready(function () {
 
             $('#btnDelete').click(function (v) {
-              
+
                 console.log(v.target.dataset.imageid);
                 var arr = [];
                 arr = JSON.parse($('#DeleteImageIdArr').val());
@@ -252,7 +252,7 @@
             return true;
         }
     </script>
-   
+
     <script>
 
         $('#image').on('fileclear', function (event) {

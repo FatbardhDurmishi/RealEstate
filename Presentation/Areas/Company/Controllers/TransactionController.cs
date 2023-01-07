@@ -4,7 +4,6 @@ using Presentation.Areas.Company.Models.TransactionVM;
 using RealEstate.App.Constants;
 using RealEstate.App.Interfaces;
 using RealEstate.Data.Entities;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Presentation.Areas.Company.Controllers
 {
@@ -45,8 +44,8 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult AddTransaction(TransactionVM model)
         {
             var userId = _userService.GetUserId();
-            var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id);
-            if (transaction == null)
+            var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id &&x.Status!= TransactionStatus.Denied, includeProperties: "Property,TransactionTypeNavigation");
+            if (transaction == null || transaction.Status == TransactionStatus.Denied)
             {
                 if (ModelState.IsValid)
                 {
@@ -80,14 +79,14 @@ namespace Presentation.Areas.Company.Controllers
             }
             else
             {
-                if (model.Transaction.TransactionTypeNavigation.Name == TransactionTypes.Rent)
+                if (transaction.TransactionTypeNavigation.Name == TransactionTypes.Rent)
                 {
-                    TempData["error"] = "You already requested tou rent this property";
+                    TempData["error"] = "You already requested to rent this property";
                     return RedirectToAction("Index", "Home", new { area = "Individual" });
                 }
                 else
                 {
-                    TempData["error"] = "You already requested tou buy this property";
+                    TempData["error"] = "You already requested to buy this property";
                     return RedirectToAction("Index", "Home", new { area = "Individual" });
                 }
 
@@ -96,7 +95,7 @@ namespace Presentation.Areas.Company.Controllers
 
         }
 
-        public static decimal CalculateTotalPrice(DateTime startDate, DateTime endDate)
+        public static int CalculateTotalPrice(DateTime startDate, DateTime endDate)
         {
             int months = 0;
             while (startDate < endDate)
@@ -106,8 +105,7 @@ namespace Presentation.Areas.Company.Controllers
             }
             return months;
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public IActionResult ApproveRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "TransactionTypeNavigation,Buyer,Owner,Property");
@@ -128,8 +126,7 @@ namespace Presentation.Areas.Company.Controllers
 
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public IActionResult RejectRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id);
@@ -174,6 +171,18 @@ namespace Presentation.Areas.Company.Controllers
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "TransactionTypeNavigation,Buyer,Owner,Property");
             return View(transaction);
 
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id);
+            if (transaction == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            _transactionRepository.Remove(transaction);
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
 

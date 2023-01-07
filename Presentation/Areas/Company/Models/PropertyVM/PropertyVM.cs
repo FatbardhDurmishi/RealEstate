@@ -16,6 +16,8 @@ namespace Presentation.Areas.Company.Models.PropertyVM
         [ValidateNever]
         public IEnumerable<SelectListItem> PropertyTypeList { get; set; }
         [ValidateNever]
+        public IEnumerable<SelectListItem> Cities { get; set; }
+        [ValidateNever]
         [DisplayName("Choose the cover Image of your property")]
         public IFormFile CoverImage { get; set; }
         [ValidateNever]
@@ -24,7 +26,7 @@ namespace Presentation.Areas.Company.Models.PropertyVM
         public IFormFileCollection PropertyImages { get; set; }
         [ValidateNever]
         [BindNever]
-        public int[] DeleteImageIdArr { get; set; } =new int[0];
+        public int[] DeleteImageIdArr { get; set; } = new int[0];
         //[DisplayName("Choose the Images of your property")]
         //public List<PropertyImageVM> Images { get; set; }
 

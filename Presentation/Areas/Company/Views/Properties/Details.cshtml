@@ -11,6 +11,7 @@
 @{
     var open = "";
     var content = "";
+    var showButton = "";
     if (SignInManager.IsSignedIn(User))
     {
         open = "content";
@@ -28,6 +29,11 @@
     {
         content = "Buy Property";
     }
+    if (userService.GetUserId() == Model.UserId || userService.GetUserId() == Model.User.CompanyId)
+    {
+        showButton = "hidden";
+    }
+
 
 
 }
@@ -56,11 +62,31 @@
     </div>
     </div>
     </div>*@
+     <div class="row mb-3">
+            @* <div class="col-10">
+            <ol class="breadcrumb float-sm-right col-10 text-start">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            @if (string.IsNullOrEmpty(Model.Id))
+            {
+            <li class="breadcrumb-item active">Add</li>
+            }
+            else
+            {
+            <li class="breadcrumb-item">Edit</li>
+            <li class="breadcrumb-item active">Id</li>
 
+            }
+            </ol>
+            </div>*@
+            <div class="text-start">
+                <a asp-area="Company" asp-controller="Properties" asp-action="Index" class="btn btn-primary ">Back to List</a>
+            </div>
+        </div>
         <div class="container-fluid pt-4  col-12">
-          
 
-              
+
+
             @* <div class="row mb-2">
         <div class="col-6 col-sm-3 text start">
         <a asp-area="Company" asp-action="RequestProperty" asp-controller="Transaction" class="btn btn-primary">&nbsp;@content</a>
@@ -111,7 +137,7 @@
                                 <h1 class="text-white">@Model.Price.ToString("c")</h1>
                             </div>
                             <div class="text-end col-lg-4 col-md-6 col-sm-1">
-                                <a asp-area="Company" asp-action="AddTransaction" asp-controller="Transaction" asp-route-propertyId="@Model.Id" class="btn btn-primary">&nbsp;@content</a>
+                                <a asp-area="Company" asp-action="AddTransaction" asp-controller="Transaction" asp-route-propertyId="@Model.Id" class="btn btn-primary" style="visibility:@showButton;">&nbsp;@content</a>
                             </div>
                         </div>
 

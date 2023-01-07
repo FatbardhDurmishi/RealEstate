@@ -24,7 +24,7 @@ function loadDataTable() {
             { data: "owner.name", title: "Seller" },
             { data: "buyer.name", title: "Buyer", },
             { data: "rentPrice", title: "Rent Price" },
-            { data: "property.transactionTypeNavigation.name", title: "Property Type" },
+            { data: "property.name", title: "Property Name" },
             { data: "transactionTypeNavigation.name", title: "Transaction Type" },
             { data: "totalPrice", title: "Total Price" },
             { data: "status", title: "Status" },
@@ -37,7 +37,8 @@ function loadDataTable() {
                           <div class="w-75 btn-group align-items-center" role="group">
                             <a href="/Company/Transaction/ApproveRequest?id=${data.id}" class="btn btn-primary mx-2"><i class="fa-solid fa-check"></i></a>
                             <a href="/Company/Transaction/RejectRequest?id=${data.id}" class="btn btn-danger mx-2"><i class="fa-solid fa-xmark"></i></a>
-                            <a href="/Company/Transaction/Details?id=${data.id}" class="btn btn-secondary mx-2"><i class="fa-regular fa-circle-info"></i></a>
+                            <a href="/Company/Transaction/Details?id=${data.id}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></i></a>
+                            <a onClick=Delete('/Company/Transaction/Delete/${data}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
                         </div>
                             `
                     } else {

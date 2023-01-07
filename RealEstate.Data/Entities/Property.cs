@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace RealEstate.Data.Entities
@@ -52,5 +53,7 @@ namespace RealEstate.Data.Entities
         public virtual ICollection<PropertyImage> PropertyImages { get; set; }
         [InverseProperty("Property")]
         public virtual ICollection<Transaction> Transactions { get; set; }
+
+
     }
 }
