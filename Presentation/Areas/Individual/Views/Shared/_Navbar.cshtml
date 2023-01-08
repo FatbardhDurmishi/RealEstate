@@ -2,9 +2,14 @@
 @inject IUserService userService
 @using Microsoft.AspNetCore.Identity
 @using RealEstate.Data.Identity;
+@using RiinvestTravel.App.Constants
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
+@{
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+}
 @if (SignInManager.IsSignedIn(User))
 {
     <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-2">
@@ -62,7 +67,7 @@ else
 {
     <nav class="navbar navbar-expand navbar-light sticky-top px-4 py-2 bg-dark">
 
-        <a class="nav-link text-primary" asp-area="Individual" asp-controller="Home" asp-action="Index">Home</a>
+        <a class="nav-link text-primary" asp-area="Individual" asp-controller="Home" asp-action="Index">  @SharedLocalizer["Home"]</a>
         <ul class="navbar-nav align-items-center ms-auto">
 
             @*   <div class="nav-item dropdown">
@@ -96,6 +101,45 @@ else
             <li class="nav-item">
                 <a class="nav-link text-primary" asp-area="Individual" asp-controller="Account" asp-action="Login">Login</a>
             </li>
+
+               <li class="nav-item dropdown">
+        @if (culture == LanguageConstants.AlbanianKey)
+        {
+            <a class="nav-link" data-toggle="dropdown" href="#">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADdklEQVR4nO1ZS6wMURAdv/hGPKyJ+IWw8g8rrIiVnYWlxCcsJGxZic97Fki8YEcs2JOwsPOJhYiNnUj8Fp54vHuqalBS824/baZ7uqf79vswJ7nJpG/dU3O67q1bNVOrddFF9VDVGQxcZKIPQqQhBxO9Z6DPfFQuhIGLoQW0CAJ6qxdCPhIiG0Jzy9DQpigyoblbEL212gTlH8F/LUQ6WNMV0imS3liITNWOvxLIvyykE4hzWxocwMvE+fEiRJzbykSPRGR90jwDpzxHfxH+YMhyxMAZ/8Zfqeqc+JyqzmKiTzZfB7YX4Q+GLEdWJ9m28WLuquqklvIGeF6UPxjyOAKwjIEBb3tNVScz8z4GfjEgadsuL38Q5HUkzm1j4JuvnR4yUPdrj4fgL41OHNWBnRaFWJrtD8k/WhHZIsCLpvL8uxCdUNWZZflLI8sREa0S4DYDP73tGyLaawd/RBDRR2ZeW4Q/GNIcEdFKJroXCWCALRVbyo3Z7LGMxcBnVe0Z005TUoQAWOIFgImuOucWpXEQ0fIx7zSlTejZuf369euC1MXjqdOUQHu46rMgWfyZtRZwWIBDpR2VhGTxW7j8ltiYcm/UbdjnUo5isMRgd5AN59ziMEKA3qZD1bjkiGhFrCyxgzZgzzxpf1Yf0vZLAQdjvKeDCPE/0PU2UhzRY1Wd3nhjwOuWLwq8tjmzMduiQhh4Glvzxmq30kIShE1logdtcvoDsynqiIhW+0h8sSHDLcDO4EKY6EqOC+pyUUcMnPO214Xoho/0zeBCkhbnIclj46PdSC51YIdFQoaj41R13rgQwsCzLJs60W7P9U5Vp9gQonc+KgfGVIhlMFWd5jvJW235gDs+An3RM/aljSWPsRYSJYCeeBvcDCt1GKDmMkZENkT8VmlXIiQP4qk5umcS7YAj8TspPuTP87OVCBGik1kZ7K9sBgykpVIr93Nkw49Jqb20kIJifgjRsTgHM68ZsXFua7MPAEujFrpOtKsSIZ2KSRTypwx6m3aOmOiJ36J3KhOSV0zS1vJ3R6NXscuwDf9Rb8M6OLiwMiFFD3sjLYuss6Gq89N4VHV2zG5ump8qNLSk38qc1EZBiNVmtn38Fro0YYVEYKL7VTqSURSS2mmWhQwNbR61v7kTOs3gg4HzlQuJd5oV/UB3wTrTyoV00UWt9hspYwcqx98H7QAAAABJRU5ErkJggg==">
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-right p-0">
+                <a asp-area="Admin" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" class="dropdown-item active">
+                   <p class="dropdown-item" type="button"> @SharedLocalizer["Albanian"] </p>
+                </a>
+                <a asp-area="Admin" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey class="dropdown-item">
+                   <p class="dropdown-item" type="button"> @SharedLocalizer["English"] </p>
+                </a>
+            </div>
+        }
+        else
+        {
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADdklEQVR4nO1ZS6wMURAdv/hGPKyJ+IWw8g8rrIiVnYWlxCcsJGxZic97Fki8YEcs2JOwsPOJhYiNnUj8Fp54vHuqalBS824/baZ7uqf79vswJ7nJpG/dU3O67q1bNVOrddFF9VDVGQxcZKIPQqQhBxO9Z6DPfFQuhIGLoQW0CAJ6qxdCPhIiG0Jzy9DQpigyoblbEL212gTlH8F/LUQ6WNMV0imS3liITNWOvxLIvyykE4hzWxocwMvE+fEiRJzbykSPRGR90jwDpzxHfxH+YMhyxMAZ/8Zfqeqc+JyqzmKiTzZfB7YX4Q+GLEdWJ9m28WLuquqklvIGeF6UPxjyOAKwjIEBb3tNVScz8z4GfjEgadsuL38Q5HUkzm1j4JuvnR4yUPdrj4fgL41OHNWBnRaFWJrtD8k/WhHZIsCLpvL8uxCdUNWZZflLI8sREa0S4DYDP73tGyLaawd/RBDRR2ZeW4Q/GNIcEdFKJroXCWCALRVbyo3Z7LGMxcBnVe0Z005TUoQAWOIFgImuOucWpXEQ0fIx7zSlTejZuf369euC1MXjqdOUQHu46rMgWfyZtRZwWIBDpR2VhGTxW7j8ltiYcm/UbdjnUo5isMRgd5AN59ziMEKA3qZD1bjkiGhFrCyxgzZgzzxpf1Yf0vZLAQdjvKeDCPE/0PU2UhzRY1Wd3nhjwOuWLwq8tjmzMduiQhh4Glvzxmq30kIShE1logdtcvoDsynqiIhW+0h8sSHDLcDO4EKY6EqOC+pyUUcMnPO214Xoho/0zeBCkhbnIclj46PdSC51YIdFQoaj41R13rgQwsCzLJs60W7P9U5Vp9gQonc+KgfGVIhlMFWd5jvJW235gDs+An3RM/aljSWPsRYSJYCeeBvcDCt1GKDmMkZENkT8VmlXIiQP4qk5umcS7YAj8TspPuTP87OVCBGik1kZ7K9sBgykpVIr93Nkw49Jqb20kIJifgjRsTgHM68ZsXFua7MPAEujFrpOtKsSIZ2KSRTypwx6m3aOmOiJ36J3KhOSV0zS1vJ3R6NXscuwDf9Rb8M6OLiwMiFFD3sjLYuss6Gq89N4VHV2zG5ump8qNLSk38qc1EZBiNVmtn38Fro0YYVEYKL7VTqSURSS2mmWhQwNbR61v7kTOs3gg4HzlQuJd5oV/UB3wTrTyoV00UWt9hspYwcqx98H7QAAAABJRU5ErkJggg==">
+
+  </button>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right p-0">
+                <a asp-area="Admin" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey" class="dropdown-item active">
+                    <p class="dropdown-item" type="button"> @SharedLocalizer["English"] </p>
+                </a>
+                <a asp-area="Admin" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" class="dropdown-item">
+                    <i class="flag-icon flag-icon-al mr-2">aa</i> @SharedLocalizer["Albanian"]
+                </a>
+
+                    <button class="dropdown-item" type="button">Action</button>
+    <button class="dropdown-item" type="button">Another action</button>
+    <button class="dropdown-item" type="button">Something else here</button>
+            </div>
+        }
+      <li class="nav-item">
 
         </ul>
     </nav>
