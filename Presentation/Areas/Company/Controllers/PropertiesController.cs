@@ -19,7 +19,8 @@ namespace Presentation.Areas.Company.Controllers
         private readonly IPropertyTypeRepository _propertyTypeRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IPropertyImagesRepository _propertyImagesRepository;
-        public PropertiesController(IPropertyRepository propertyRepository, IUserService userService, ITransactionTypeRepository transactionTypeRepository, IUserRepository userRepository, IPropertyTypeRepository propertyTypeRepository, IWebHostEnvironment webHostEnvironment, IPropertyImagesRepository propertyImagesRepository)
+        private readonly ITransactionRepository _transactionRepository;
+        public PropertiesController(IPropertyRepository propertyRepository, IUserService userService, ITransactionTypeRepository transactionTypeRepository, IUserRepository userRepository, IPropertyTypeRepository propertyTypeRepository, IWebHostEnvironment webHostEnvironment, IPropertyImagesRepository propertyImagesRepository, ITransactionRepository transactionRepository)
         {
             _propertyRepository = propertyRepository;
             _userService = userService;
@@ -28,6 +29,7 @@ namespace Presentation.Areas.Company.Controllers
             _propertyTypeRepository = propertyTypeRepository;
             _webHostEnvironment = webHostEnvironment;
             _propertyImagesRepository = propertyImagesRepository;
+            _transactionRepository = transactionRepository;
         }
 
         public IActionResult Index()
@@ -216,7 +218,6 @@ namespace Presentation.Areas.Company.Controllers
 
 
         #region API CALLS
-        [HttpGet]
         public IActionResult GetPropertiesJson()
         {
 
@@ -224,15 +225,33 @@ namespace Presentation.Areas.Company.Controllers
             {
                 var companyId = _userService.GetUserId();
                 var properties = _propertyRepository.GetAll(x => x.User.CompanyId == companyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation");
-
+                if (properties != null)
+                {
+                    foreach (var property in properties)
+                    {
+                        if (property.Status != PropertyStatus.Rented)
+                        {
+                            property.ShowButtons = true;
+                        }
+                    }
+                }
 
                 return Json(properties);
             }
             else
             {
                 var userId = _userService.GetUserId();
-                var properties = _propertyRepository.GetAll(x => x.UserId == userId, includeProperties: "PropertyTypeNavigation,TransactionTypeNavigation");
-
+                var properties = _propertyRepository.GetAll(x => x.UserId == userId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation");
+                if (properties != null)
+                {
+                    foreach (var property in properties)
+                    {
+                        if (property.Status != PropertyStatus.Rented)
+                        {
+                            property.ShowButtons = true;
+                        }
+                    }
+                }
                 return Json(properties);
 
             }
@@ -273,6 +292,8 @@ namespace Presentation.Areas.Company.Controllers
 
             }
             _propertyImagesRepository.RemoveRange(objImage);
+            var transaction = _transactionRepository.GetAll(x => x.PropertyId == obj.Id);
+            _transactionRepository.RemoveRange(transaction);
             _propertyRepository.Remove(obj);
             return Json(new { success = true, message = "Deleted Successfully" });
         }

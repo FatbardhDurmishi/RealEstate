@@ -52,7 +52,10 @@ namespace RealEstate.Data.Entities
         [InverseProperty("Property")]
         public virtual ICollection<PropertyImage> PropertyImages { get; set; }
         [InverseProperty("Property")]
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Transaction>? Transactions { get; set; }
+        [NotMapped]
+        public bool ShowButtons = false;
+
 
 
     }

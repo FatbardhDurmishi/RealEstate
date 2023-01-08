@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace RealEstate.App.Interfaces
 {
-    public interface IPropertyImagesRepository : IRepository<PropertyImage>
+    public interface IPropertyRepository : IRepository<Property>
     {
+        string UpdateStatus(Property property, string status);
     }
 }

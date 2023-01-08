@@ -1,0 +1,109 @@
+﻿@using Presentation.Areas.Individual.Models.DashboardViewModels;
+@model IEnumerable<Transaction>
+
+<div class="content">
+    <partial name="_Navbar" />
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-6 col-xl-3">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-line fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">@SharedLocalizer["TodaySale"]</p>
+                        <h6 class="mb-0">@ViewBag.TodaySale</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">@SharedLocalizer["TotalSale"]</p>
+                        <h6 class="mb-0">@ViewBag.TotalSales</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-area fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">@SharedLocalizer["ProfitFromRentThisMonth"]</p>
+                        <h6 class="mb-0">@ViewBag.RentThisMonth</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">@SharedLocalizer["ExpectedProfitFromRentThisYear"]</p>
+                        <h6 class="mb-0">@ViewBag.TotalRent</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sale & Revenue End -->
+    <!-- Sales Chart Start -->
+    @*<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+    <div class="col-sm-12 col-xl-6">
+    <div class="bg-light text-center rounded p-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+    <h6 class="mb-0">Worldwide Sales</h6>
+    <a href="">Show All</a>
+    </div>
+    <canvas id="worldwide-sales"></canvas>
+    </div>
+    </div>
+    <div class="col-sm-12 col-xl-6">
+    <div class="bg-light text-center rounded p-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+    <h6 class="mb-0">Salse & Revenue</h6>
+    <a href="">Show All</a>
+    </div>
+    <canvas id="salse-revenue"></canvas>
+    </div>
+    </div>
+    </div>
+    </div>*@
+    <!-- Sales Chart End -->
+    <!-- Recent Sales Start -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">@SharedLocalizer["RecentTransactions"]</h6>
+                <a asp-area="Company" asp-controller="Transaction" asp-action="Index">@SharedLocalizer["SeeAll"]</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">@SharedLocalizer["Date"]</th>
+                            <th scope="col">@SharedLocalizer["Seller"]</th>
+                            <th scope="col">@SharedLocalizer["Buyer"]</th>
+                            <th scope="col">@SharedLocalizer["PropertyName"]</th>
+                            <th scope="col">@SharedLocalizer["TransactionType"]</th>
+                            <th scope="col">@SharedLocalizer["TotalPrice"]</th>
+                            @*<th scope="col">Action</th>*@
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tbody>
+                            <tr>
+                                <td>@item.Date</td>
+                                <td>@item.Owner.Name</td>
+                                <td>@item.Buyer.Name</td>
+                                <td>@item.Property.Name</td>
+                                <td>@item.TransactionTypeNavigation.Name</td>
+                                <td>@item.TotalPrice</td>
+                                @*<td><a asp-area="Company" asp-controller="Transaction" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Detail</a></td>*@
+                            </tr>
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

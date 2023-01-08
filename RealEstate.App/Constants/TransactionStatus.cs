@@ -12,7 +12,7 @@ namespace RealEstate.App.Constants
         public const string Rented = "Rented";
         public const string Pending = "Pending";
         public const string Denied = "Denied";
-        public const string Approved = "Approved";
+        public const string Expired = "Expired";
 
     }
 }

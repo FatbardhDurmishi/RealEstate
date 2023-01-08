@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.App.Interfaces
 {
-    public interface IPropertyRepository:IRepository<Property>
+    public interface IPropertyImagesRepository : IRepository<PropertyImage>
     {
     }
 }

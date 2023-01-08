@@ -1,11 +1,6 @@
 ﻿using RealEstate.App.Interfaces;
 using RealEstate.Data.Context;
 using RealEstate.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealEstate.App.Implementations
 {
@@ -16,6 +11,12 @@ namespace RealEstate.App.Implementations
         public PropertyRepository(DBRealEstateContext db) : base(db)
         {
             _db = db;
+        }
+
+        public string UpdateStatus(Property property, string status)
+        {
+            property.Status = status;
+            return status;
         }
     }
 }

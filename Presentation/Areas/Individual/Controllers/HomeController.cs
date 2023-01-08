@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Presentation.Models;
 using RealEstate.App.Constants;
 using RealEstate.App.Interfaces;
@@ -15,13 +17,55 @@ namespace Presentation.Areas.Individual.Controllers
         private readonly IUserService _userService;
         private readonly IPropertyTypeRepository _propertyTypeRepository;
         private readonly ITransactionTypeRepository _transactionTypeRepository;
-
-        public HomeController(IPropertyRepository propertyRepository, IUserService userService, IPropertyTypeRepository propertyTypeRepository, ITransactionTypeRepository transactionTypeRepository)
+        private readonly ITransactionRepository _transactionRepository;
+        private IOptions<RequestLocalizationOptions> _options;
+        private IHttpContextAccessor _httpContextAccessor;
+        public HomeController(IPropertyRepository propertyRepository, IUserService userService, IPropertyTypeRepository propertyTypeRepository, ITransactionTypeRepository transactionTypeRepository, ITransactionRepository transactionRepository, IHttpContextAccessor httpContextAccessor, IOptions<RequestLocalizationOptions> options)
         {
             _propertyRepository = propertyRepository;
             _userService = userService;
             _propertyTypeRepository = propertyTypeRepository;
             _transactionTypeRepository = transactionTypeRepository;
+            _transactionRepository = transactionRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _options = options;
+        }
+
+        public IActionResult Dashboard()
+        {
+            if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
+            {
+                var userId = _userService.GetUserId();
+                ViewBag.TodaySale = _transactionRepository.GetAll(x => x.Date.Day == DateTime.Today.Day && x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+
+                ViewBag.TotalSales = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+
+                ViewBag.RentThisMonth = _transactionRepository.GetAll(x => x.RentStartDate.Month >= DateTime.Now.Month && x.RentEndDate.Month <= DateTime.Now.Month && x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.RentPrice).Sum();
+
+                ViewBag.TotalRent = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+                //ViewBag.LatestTransactions = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId, includeProperties: "Owner,TransactionTypeNavigation").Take(5).OrderBy(x => x.Date);
+                var latestTransactions = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId || x.Buyer.CompanyId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").Take(5).OrderBy(x => x.Date);
+
+
+                //ViewBag.RentThisYear
+                return View(latestTransactions);
+
+            }
+            else
+            {
+                var userId = _userService.GetUserId();
+                ViewBag.TodaySale = _transactionRepository.GetAll(x => x.Date == DateTime.Today && x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+                ViewBag.TotalSales = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+
+                ViewBag.RentThisMonth = _transactionRepository.GetAll(x => x.RentStartDate.Month >= DateTime.Now.Month && x.RentEndDate.Month <= DateTime.Now.Month && x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.RentPrice).Sum();
+                ViewBag.TotalRent = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent, includeProperties: "Owner,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
+                //ViewBag.LatestTransactions = _transactionRepository.GetAll(x => x.OwnerId == userId, includeProperties: "Owner,TransactionTypeNavigation").Take(5).OrderBy(x => x.Date);
+                var latestTransactions = _transactionRepository.GetAll(x => x.OwnerId == userId || x.BuyerId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").Take(5).OrderBy(x => x.Date);
+                return View(latestTransactions);
+
+
+            }
+
         }
 
         public IActionResult Index(string? city, int? bedrooms, int? bathrooms, decimal? minPrice, decimal? maxPrice, int? propertyType, int? transactionType)
@@ -59,6 +103,24 @@ namespace Presentation.Areas.Individual.Controllers
                 filtered = transactionType.HasValue ? filtered.Where(x => x.TransactionType == transactionType) : filtered;
 
                 return View(filtered);
+            }
+
+        }
+
+        public IActionResult SetLanguage(string culture,string returnUrl)
+        {
+            try
+            {
+                var cultureItems = _options.Value.SupportedUICultures!.Select(x => x.Name).ToArray();
+                if (cultureItems.Any(x => x.Equals(culture)))
+                {
+                    Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), HttpOnly = true, Secure = _httpContextAccessor.HttpContext!.Request.IsHttps });
+                }
+                return LocalRedirect(returnUrl);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
         }

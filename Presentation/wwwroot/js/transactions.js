@@ -25,7 +25,7 @@ function loadDataTable() {
             { data: "buyer.name", title: "Buyer", },
             { data: "rentPrice", title: "Rent Price" },
             { data: "property.name", title: "Property Name" },
-            { data: "transactionTypeNavigation.name", title: "Transaction Type" },
+            { data: "transactionTypeNavigation.name", title: "Transaction Type", "width": "15%" },
             { data: "totalPrice", title: "Total Price" },
             { data: "status", title: "Status" },
             {

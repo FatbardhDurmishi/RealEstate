@@ -5,6 +5,11 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
+@{
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+}
+
 @if (SignInManager.IsSignedIn(User))
 {
     <div class="content">
@@ -15,7 +20,7 @@
             <form asp-area="Individual" asp-controller="Home" asp-action="Index" method="post">
 
                 <select name="bedrooms" class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2" aria-label="Default select example">
-                    <option selected disabled>BedRooms</option>
+                    <option selected disabled>@SharedLocalizer["BedRooms"] </option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -23,7 +28,7 @@
                     <option value="5">5</option>
                 </select>
                 <select name="bathrooms" class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2 " aria-label="Default select example">
-                    <option selected>Bathrooms</option>
+                    <option selected>@SharedLocalizer["BathRooms"]</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -31,7 +36,7 @@
                     <option value="5">5</option>
                 </select>
                 <select class="option-bar  col-lg-3 cl-md-6 col-sm-12 col-form-label-sm mb-2 " name="city">
-                    <option disabled selected>City</option>
+                    <option disabled selected>@SharedLocalizer["City"]</option>
                     <option value="Prishtinë">Prishtinë</option>
                     <option value="Gjilan">Gjilan</option>
                     <option value="Prizren">Prizren</option>
@@ -47,38 +52,25 @@
                     <option value="Suharekë">Suharekë</option>
                 </select>
                 <select class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2 " name="propertyType" asp-items="@ViewBag.PropertyTypes">
-                    <option disabled selected>Property Type</option>
+                    <option disabled selected>@SharedLocalizer["PropertyType"]</option>
                 </select>
                 <select id="transactionType" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2 " name="transactionType" asp-items="@ViewBag.TransactionType">
-                    <option disabled selected>Transaction Type</option>
+                    <option disabled selected>@SharedLocalizer["TransactionType"]</option>
                 </select>
                 <select id="minPrice" name="minPrice" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2">
-                    <option selected disabled>Min Price</option>
+                    <option selected disabled>@SharedLocalizer["MinPrice"]</option>
                 </select>
                 <select id="maxPrice" name="maxPrice" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2">
-                    <option selected disabled>Max Price</option>
+                    <option selected disabled>@SharedLocalizer["MaxPrice"]</option>
                 </select>
 
-                <button class="btn btn-primary col-form-label-sm col-lg-3 cl-md-6 col-sm-12" type="submit">Search</button>
-                <a asp-area="Individual" asp-controller="Home" asp action="Index" class="btn btn-secondary col-form-label-sm col-lg-3 cl-md-6 col-sm-12">Clear Filters</a>
+                <button class="btn btn-primary col-form-label-sm col-lg-3 cl-md-6 col-sm-12" type="submit">@SharedLocalizer["Search"]</button>
+                <a asp-area="Individual" asp-controller="Home" asp action="Index" class="btn btn-secondary col-form-label-sm col-lg-3 cl-md-6 col-sm-12">@SharedLocalizer["ClearFilters"]</a>
 
 
 
             </form>
-            <script>
-                $(document).ready(function () {
-                    $('#transactionType').change(function () {
-                        var val = $(this).val();
-                        if (val == "1") {
-                            $('#minPrice).html("<option value='10000'>10000</option><option value='7500'>7500</option><option value='15000'>15000</option><option value='20000'>20000</option><option value='50000'>50000</option><option value='100000'>100000</option><option value='150000'>150000</option><option value='200000'>200000</option>");
-                                                            $('#maxPrice').html("<option value='10000'>10000</option><option value='7500'>7500</option><option value='15000'>15000</option><option value='20000'>20000</option><option value='50000'>50000</option><option value='100000'>100000</option><option value='150000'>150000</option><option value='200000'>200000</option>");
-                        } else if (val == "3") {
-                            $('#minPrice').html("<option value='200'>200</option><option value='250'>250</option><option value='300'>300</option><option value='400'>400</option><option value='500'>500</option><option value='700'>700</option><option value='1000'>1000</option>");
-                            $('#maxPrice').html("<option value='200'>200</option><option value='250'>250</option><option value='300'>300</option><option value='400'>400</option><option value='500'>500</option><option value='700'>700</option><option value='1000'>1000</option>");
-                        }
-                    });
-                });
-            </script>
+
 
 
             <div class="row pb-3 px-2 w-100">
@@ -97,19 +89,19 @@
                                             <p class="card-title text-info"><b>@property.Price.ToString("c")</b></p>
                                         </div>
                                         <div class="pl-1">
-                                            <p>BedRooms: @property.BedRooms</p>
+                                            <p>@SharedLocalizer["BedRooms"]: @property.BedRooms</p>
                                         </div>
                                         <div class="pl-1">
-                                            <p>BathRooms: @property.BathRooms<b></b></p>
+                                            <p>@SharedLocalizer["BathRooms"]: @property.BathRooms<b></b></p>
                                         </div>
                                         <div class="pl-1">
-                                            <p>Area: @property.Area (in m&sup2;) <b></b></p>
+                                            <p>@SharedLocalizer["Area"]: @property.Area (@SharedLocalizer["In"] m&sup2;) <b></b></p>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div>
-                                    <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">Details</a>
+                                <div class="card-footer">
+                                    <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">@SharedLocalizer["Details"]</a>
                                 </div>
                             </div>
                         </div>
@@ -121,41 +113,141 @@
 }
 else
 {
+    <div class="container-fluid pt-4 px-4 col-12">
+        <form asp-area="Individual" asp-controller="Home" asp-action="Index" method="post">
 
-    <div class="row pb-3 px-2 w-100">
-        @foreach (var property in Model)
-        {
+            <select name="bedrooms" class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2" aria-label="Default select example">
+                <option selected disabled>@SharedLocalizer["BedRooms"]</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <select name="bathrooms" class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2 " aria-label="Default select example">
+                <option selected>@SharedLocalizer["BathRooms"]</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <select class="option-bar  col-lg-3 cl-md-6 col-sm-12 col-form-label-sm mb-2 " name="city">
+                <option disabled selected>City</option>
+                <option value="Prishtinë">Prishtinë</option>
+                <option value="Gjilan">Gjilan</option>
+                <option value="Prizren">Prizren</option>
+                <option value="Pejë">Pejë</option>
+                <option value="Ferizaj">Ferizaj</option>
+                <option value="Mitrovice">Mitrovice</option>
+                <option value="Gjakovë">Gjakovë</option>
+                <option value="Malishevë">Malishevë</option>
+                <option value="Podujevë">Podujevë</option>
+                <option value="Vushtrri">Vushtrri</option>
+                <option value="Skënderaj">Skënderaj</option>
+                <option value="Viti">Viti</option>
+                <option value="Suharekë">Suharekë</option>
+            </select>
+            <select class="option-bar col-lg-3 col-form-label-sm cl-md-6 col-sm-12 mb-2 " name="propertyType" asp-items="@ViewBag.PropertyTypes">
+                <option disabled selected>@SharedLocalizer["PropertyType"]</option>
+            </select>
+            <select id="transactionType" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2 " name="transactionType" asp-items="@ViewBag.TransactionType">
+                <option disabled selected>@SharedLocalizer["TransactionType"]</option>
+            </select>
+            <select id="minPrice" name="minPrice" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2">
+                <option selected disabled>@SharedLocalizer["MinPrice"]</option>
+            </select>
+            <select id="maxPrice" name="maxPrice" class="option-bar large col-form-label-sm col-lg-3 cl-md-6 col-sm-12 mb-2">
+                <option selected disabled>@SharedLocalizer["MaxPrice"]</option>
+            </select>
 
-            <div class="col-lg-3 col-md-6">
-                <div class="row p-2">
-                    <div class="col-12 p-1" style="border:1px solid #008cba; border-radius:5px;">
-                        <div class="card">
-                            <img src="@property.CoverImageUrl" class="card-img-top rounded" style="width:100%; aspect-ratio:1/1;" />
+            <button class="btn btn-primary col-form-label-sm col-lg-3 cl-md-6 col-sm-12" type="submit">@SharedLocalizer["Search"]</button>
+            <a asp-area="Individual" asp-controller="Home" asp action="Index" class="btn btn-secondary col-form-label-sm col-lg-3 cl-md-6 col-sm-12">@SharedLocalizer["ClearFilters"]</a>
 
-                            <div class="card-body">
-                                <div class="pl-1">
-                                    <p class="card-title h5 text-primary">@property.Name</p>
-                                    <p class="card-title text-info"><b>@property.Price.ToString("c")</b></p>
+
+
+        </form>
+        <div class="row pb-3 px-2 w-100">
+            @foreach (var property in Model)
+            {
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="row p-2">
+                        <div class="col-12 p-1" style="border:1px solid #008cba; border-radius:5px;">
+                            <div class="card">
+                                <img src="@property.CoverImageUrl" class="card-img-top rounded" style="width:100%; aspect-ratio:1/1;" />
+
+                                <div class="card-body">
+                                    <div class="pl-1">
+                                        <p class="card-title h5 text-primary">@property.Name</p>
+                                        <p class="card-title text-info"><b>@property.Price.ToString("c")</b></p>
+                                    </div>
+                                    <div class="pl-1">
+                                        <p>@SharedLocalizer["BedRooms"]: @property.BedRooms</p>
+                                    </div>
+                                    <div class="pl-1">
+                                        <p>@SharedLocalizer["BathRooms"]: @property.BathRooms<b></b></p>
+                                    </div>
+                                    <div class="pl-1">
+                                        <p>@SharedLocalizer["Area"]: @property.Area (@SharedLocalizer["In"] m&sup2;) <b></b></p>
+                                    </div>
                                 </div>
-                                <div class="pl-1">
-                                    <p>BedRooms: @property.BedRooms</p>
-                                </div>
-                                <div class="pl-1">
-                                    <p>BathRooms: @property.BathRooms<b></b></p>
-                                </div>
-                                <div class="pl-1">
-                                    <p>Area: @property.Area (in m&sup2;) <b></b></p>
-                                </div>
+
                             </div>
-
-                        </div>
-                        <div>
-                            <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">Details</a>
+                            <div class="card-footer">
+                                <a asp-area="Company" asp-controller="Properties" asp-action="Details" class="btn btn-primary w-100" asp-route-propertyId="@property.Id">@SharedLocalizer["Details"]</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
+    <partial name="_ValidationScriptsPartial" />
+}
+@section Scripts{
+    <script>
+        var saleMinPriceOptions = ['10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
+        var saleMaxPriceOptions = ['10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
+        var rentMinPriceOptions = ['200', '250', '300', '400', '500', '700'];
+        var rentMaxPriceOptions = ['200', '250', '300', '400', '500', '700'];
+
+        $('#transactionType').change(function () {
+            var option = $(this).val();
+
+            $('#minPrice').empty();
+            $('#maxPrice').empty();
+            if (option == '1') {
+                for (var i = 0; i < saleMinPriceOptions.length; i++) {
+                    $('#minPrice').append($('<option>', {
+                        value: saleMinPriceOptions[i],
+                        text: saleMinPriceOptions[i]
+                    }));
+                }
+                for (var i = 0; i < saleMaxPriceOptions.length; i++) {
+                    $('#maxPrice').append($('<option>', {
+                        value: saleMaxPriceOptions[i],
+                        text: saleMaxPriceOptions[i]
+                    }));
+
+                }
+            }
+            else if (option == '3') {
+                for (var i = 0; i < rentMinPriceOptions.length; i++) {
+                    $('#minPrice').append($('<option>', {
+                        value: rentMinPriceOptions[i],
+                        text: rentMinPriceOptions[i]
+                    }));
+                }
+                for (var i = 0; i < rentMaxPriceOptions.length; i++) {
+                    $('#maxPrice').append($('<option>', {
+                        value: rentMaxPriceOptions[i],
+                        text: rentMaxPriceOptions[i]
+                    }));
+
+                }
+            }
+        })
+    </script>
 }
 

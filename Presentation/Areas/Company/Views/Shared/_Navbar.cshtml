@@ -1,20 +1,48 @@
-﻿@using RealEstate.App.Interfaces;
+﻿@using RealEstate.App.Constants;
+@using RealEstate.App.Interfaces;
 @inject IUserService userService
 @using Microsoft.AspNetCore.Identity
 @using RealEstate.Data.Identity;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+
+}
+
 @if (SignInManager.IsSignedIn(User))
 {
     <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-2">
-        <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-            <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
-        </a>
+
         <a href="#" class="sidebar-toggler flex-shrink-0">
             <i class="fa fa-bars"></i>
         </a>
-       
+        @if (culture == LanguageConstants.AlbanianKey)
+        {
+
+
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" asp-route-returnUrl="@returnUrl" class="mx-2">
+                <i class="flag-icon flag-icon-al mr-2"></i> @*@SharedLocalizer["Albanian"]*@
+            </a>
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey" asp-route-returnUrl="@returnUrl" class="mx-2">
+                <i class="flag-icon flag-icon-us mr-2"></i> @*@SharedLocalizer["English"]*@
+            </a>
+
+        }
+        else
+        {
+
+
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey" asp-route-returnUrl="@returnUrl" class="mx-2">
+                <i class="flag-icon flag-icon-us mr-2"></i> @*@SharedLocalizer["English"]*@
+            </a>
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" asp-route-returnUrl="@returnUrl" class="mx-2">
+                <i class="flag-icon flag-icon-al mr-2"></i> @*@SharedLocalizer["Albanian"]*@
+            </a>
+
+        }
         <div class="navbar-nav align-items-center ms-auto">
 
             @*   <div class="nav-item dropdown">
@@ -47,10 +75,8 @@
                     <span class="d-none d-lg-inline-flex">@userService.GetFullName()</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="#" class="dropdown-item">Settings</a>
                     <form asp-area="Individual" asp-action="Logout" asp-controller="Account" method="post">
-                        <button type="submit" class="dropdown-item">Log Out</button>
-
+                        <button type="submit" class="dropdown-item">@SharedLocalizer["Logout"]</button>
                     </form>
                 </div>
             </div>
@@ -62,7 +88,31 @@ else
 {
     <nav class="navbar navbar-expand navbar-light sticky-top px-4 py-2 bg-dark">
 
-        <a class="nav-link text-primary" asp-area="Individual" asp-controller="Home" asp-action="Index">Home</a>
+        <a class="nav-link text-primary" asp-area="Individual" asp-controller="Home" asp-action="Index">@SharedLocalizer["Properties"]</a>
+        @if (culture == LanguageConstants.AlbanianKey)
+        {
+
+
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" asp-route-returnUrl="@returnUrl class="mx-2">
+                <i class="flag-icon flag-icon-al mr-2"></i> @*@SharedLocalizer["Albanian"]*@
+            </a>
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey" asp-route-returnUrl="@returnUrl class="mx-2">
+                <i class="flag-icon flag-icon-us mr-2"></i> @*@SharedLocalizer["English"]*@
+            </a>
+
+        }
+        else
+        {
+
+
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.EnglishKey" name="culture" asp-route-culture="@LanguageConstants.EnglishKey" asp-route-returnUrl="@returnUrl class="mx-2">
+                <i class="flag-icon flag-icon-us mr-2"></i> @*@SharedLocalizer["English"]*@
+            </a>
+            <a asp-area="Individual" asp-controller="Home" asp-action="SetLanguage" value="@LanguageConstants.AlbanianKey" name="culture" asp-route-culture="@LanguageConstants.AlbanianKey" asp-route-returnUrl="@returnUrl class="mx-2">
+                <i class="flag-icon flag-icon-al mr-2"></i> @*@SharedLocalizer["Albanian"]*@
+            </a>
+
+        }
         <ul class="navbar-nav align-items-center ms-auto">
 
             @*   <div class="nav-item dropdown">
@@ -91,10 +141,10 @@ else
         </div>*@
 
             <li class="nav-item">
-                <a class="nav-link text-primary" asp-area="Individual" asp-controller="Account" asp-action="Register">Register</a>
+                <a class="nav-link text-primary" asp-area="Individual" asp-controller="Account" asp-action="Register">@SharedLocalizer["Register"]</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-primary" asp-area="Individual" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="nav-link text-primary" asp-area="Individual" asp-controller="Account" asp-action="Login">@SharedLocalizer["Login"]</a>
             </li>
 
         </ul>

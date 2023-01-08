@@ -19,36 +19,34 @@ function loadDataTable() {
             dataSrc: ""
         },
         columns: [
-            { data: "id", title: "Id" },
+            { data: "id", title: "Id", "width": "5%" },
             { data: "name", title: "Name" },
-            { data: "user.name", title: "Agent", },
-            { data: "user.email", title: "Agent Email" },
-            { data: "propertyTypeNavigation.name", title: "Property Type" },
-            { data: "transactionTypeNavigation.name", title: "Transaction Type" },
+            { data: "user.name", title: "User", },
+            //{ data: "user.email", title: "Email" },
+            { data: "propertyTypeNavigation.name", title: "Property Type", "width": "15%" },
+            { data: "transactionTypeNavigation.name", title: "Transaction Type", "width": "15%" },
+            { data: "status", title: "Status" },
+            { data: "price", title: "Price" },
             {
-                data: "status", title: "Status"
-                //data: "status", title: "Email Confirmed", sClass: "text-center", render: function (a, b, data, d) {
-                //    if (data.emailConfirmed == "Free") {
-                //        return '<i class="fa fa-check text-success"></i>';
-                //    }
-                //    else {
-                //        return '<i class="fa fa-check text-danger"></i>';
-                //    }
-                //}
-            },
-            {
-                data: "price", title: "Price"
-            },
-            {
-                data: "id", title: "Actions",
+                data: { id: "id", showButtons: "showButtons", title: "Actions" },
+
                 render: function (data) {
-                    return `
+                    if (data.showButtons == true) {
+                        return `
                           <div class="w-75 btn-group align-items-center" role="group">
-                            <a href="/Company/Properties/Upsert?id=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
-                            <a onClick=Delete('/Company/Properties/Delete/${data}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
-                            <a href="/Company/Properties/Details?propertyId=${data}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
-                        </div>
+                             <a href="/Company/Properties/Upsert?id=${data.id}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
+                             <a onClick=Delete('/Company/Properties/Delete/${data.id}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
+                             <a href="/Company/Properties/Details?propertyId=${data.id}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
+                          </div>
                             `
+                    } else {
+                        return `
+                          <div class="w-75 btn-group align-items-center" role="group">
+                            <a href="/Company/Properties/Details?propertyId=${data.id}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
+                        </div>
+                            `;
+                    }
+
                 }
             },
 

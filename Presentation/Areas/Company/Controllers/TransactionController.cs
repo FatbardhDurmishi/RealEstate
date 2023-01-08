@@ -44,7 +44,7 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult AddTransaction(TransactionVM model)
         {
             var userId = _userService.GetUserId();
-            var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id &&x.Status!= TransactionStatus.Denied, includeProperties: "Property,TransactionTypeNavigation");
+            var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id && x.Status != TransactionStatus.Denied, includeProperties: "Property,TransactionTypeNavigation");
             if (transaction == null || transaction.Status == TransactionStatus.Denied)
             {
                 if (ModelState.IsValid)
@@ -105,14 +105,18 @@ namespace Presentation.Areas.Company.Controllers
             }
             return months;
         }
-        
+
         public IActionResult ApproveRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "TransactionTypeNavigation,Buyer,Owner,Property");
+            var property = _propertyRepository.GetFirstOrDefault(x => x.Id == transaction.PropertyId);
+
             if (transaction.TransactionTypeNavigation.Name == TransactionTypes.Rent)
             {
                 _transactionRepository.UpdateStatus(transaction, TransactionStatus.Rented);
                 _transactionRepository.SaveChanges();
+                _propertyRepository.UpdateStatus(property, PropertyStatus.Rented);
+                _propertyRepository.SaveChanges();
                 return View(nameof(Index));
 
             }
@@ -126,7 +130,7 @@ namespace Presentation.Areas.Company.Controllers
 
         }
 
-       
+
         public IActionResult RejectRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id);
@@ -153,7 +157,7 @@ namespace Presentation.Areas.Company.Controllers
                 var transactions = _transactionRepository.GetAll(x => x.OwnerId == userId || x.BuyerId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation");
                 foreach (var transaction in transactions)
                 {
-                    if (transaction.OwnerId == userId && transaction.Status != TransactionStatus.Sold && transaction.Status != TransactionStatus.Rented && transaction.Status != TransactionStatus.Denied)
+                    if (transaction.OwnerId == userId && transaction.Status != TransactionStatus.Sold && transaction.Status != TransactionStatus.Rented && transaction.Status != TransactionStatus.Denied && transaction.Status != TransactionStatus.Expired)
                     {
                         transaction.ShowButtons = true;
                     }
