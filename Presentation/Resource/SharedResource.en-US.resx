@@ -129,6 +129,12 @@
   <data name="BedRooms" xml:space="preserve">
     <value>BedRooms</value>
   </data>
+  <data name="BestRentThisYear" xml:space="preserve">
+    <value>Best Rent This Year</value>
+  </data>
+  <data name="BestSellThisYear" xml:space="preserve">
+    <value>Best Sell This Year</value>
+  </data>
   <data name="Buyer" xml:space="preserve">
     <value>Buyer</value>
   </data>
@@ -200,6 +206,9 @@
   </data>
   <data name="TodaySale" xml:space="preserve">
     <value>Today Sales</value>
+  </data>
+  <data name="TotalExpenses" xml:space="preserve">
+    <value>Total Expenses</value>
   </data>
   <data name="TotalPrice" xml:space="preserve">
     <value>Total Price</value>

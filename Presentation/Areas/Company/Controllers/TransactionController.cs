@@ -45,6 +45,7 @@ namespace Presentation.Areas.Company.Controllers
         {
             var userId = _userService.GetUserId();
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id && x.Status != TransactionStatus.Denied, includeProperties: "Property,TransactionTypeNavigation");
+           
             if (transaction == null || transaction.Status == TransactionStatus.Denied)
             {
                 if (ModelState.IsValid)
@@ -173,7 +174,13 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult Details(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "TransactionTypeNavigation,Buyer,Owner,Property");
-            return View(transaction);
+            TransactionVM transactionvm = new()
+            {
+                Property = _propertyRepository.GetFirstOrDefault(x => x.Id == transaction.PropertyId, includeProperties: "PropertyTypeNavigation,TransactionTypeNavigation"),
+                Transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "TransactionTypeNavigation,Buyer,Owner,Property")
+            };
+
+            return View(transactionvm);
 
         }
 
