@@ -310,7 +310,7 @@ namespace Presentation.Areas.Individual.Controllers
                     //{
                     TempData["success"] = "Account Created Successfuly";
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    return RedirectToAction("Dashboard", "Home", new { area = "Individual" });
 
 
 

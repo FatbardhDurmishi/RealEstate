@@ -10,6 +10,8 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,7 @@ builder.Services.AddTransient<IPropertyTypeRepository, PropertyTypeRepository>()
 builder.Services.AddTransient<ITransactionTypeRepository, TransactionTypeRepository>();
 builder.Services.AddTransient<IPropertyImagesRepository, PropertyImagesRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+builder.Services.AddTransient<IEmailSender, EmailSenderExtensions>();
 builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -104,7 +107,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings
     options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    //options.ExpireTimeSpan = TimeSpan.FromMinutes(0);
 
     options.LoginPath = "/Individual/Account/Login";
     options.AccessDeniedPath = "/Individual/Account/AccessDenied";

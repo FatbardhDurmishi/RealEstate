@@ -48,11 +48,10 @@ namespace Presentation.Areas.Individual.Controllers
 
                 ViewBag.Expenses = _transactionRepository.GetAll(x => x.Buyer.CompanyId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
                 //ViewBag.RentThisYear
-                ViewBag.BestSellThisYear = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.TotalPrice).Take(1).Select(x => x.TotalPrice);
+                ViewBag.BestSellThisYear = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x=>x.TotalPrice).Select(x=>x.TotalPrice).FirstOrDefault();
 
 
-
-                ViewBag.BestRentThisYear = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.RentPrice).Take(1).Select(x=>x.RentPrice);
+                ViewBag.BestRentThisYear = _transactionRepository.GetAll(x => x.Owner.CompanyId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.RentPrice).Select(x=>x.RentPrice).FirstOrDefault();
 
                 return View(latestTransactions);
             }
@@ -68,7 +67,7 @@ namespace Presentation.Areas.Individual.Controllers
                 var latestTransactions = _transactionRepository.GetAll(x => x.OwnerId == userId || x.BuyerId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").Take(5).OrderBy(x => x.Date);
                 ViewBag.Expenses = _transactionRepository.GetAll(x => x.BuyerId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").Select(x => x.TotalPrice).Sum();
                 //ViewBag.RentThisYear
-                ViewBag.BestSellThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.TotalPrice).Select(x => x.TotalPrice).Take(1).Sum();
+                ViewBag.BestSellThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.TotalPrice).Select(x => x.TotalPrice).FirstOrDefault();
 
                 ViewBag.BestRentThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.RentPrice).Take(1).Select(x => x.RentPrice);
                 return View(latestTransactions);

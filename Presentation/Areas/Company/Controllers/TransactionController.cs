@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Areas.Company.Models.TransactionVM;
 using RealEstate.App.Constants;
@@ -14,12 +15,16 @@ namespace Presentation.Areas.Company.Controllers
         private readonly IUserService _userService;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IPropertyRepository _propertyRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly IUserRepository _userRepository;
 
-        public TransactionController(ITransactionRepository transactionRepository, IUserService userService, IPropertyRepository propertyRepository)
+        public TransactionController(ITransactionRepository transactionRepository, IUserService userService, IPropertyRepository propertyRepository, IEmailSender emailSender, IUserRepository userRepository)
         {
             _transactionRepository = transactionRepository;
             _userService = userService;
             _propertyRepository = propertyRepository;
+            _emailSender = emailSender;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -44,9 +49,9 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult AddTransaction(TransactionVM model)
         {
             var userId = _userService.GetUserId();
-            var transaction = _transactionRepository.GetFirstOrDefault(x => x.BuyerId == userId && x.PropertyId == model.Property.Id && x.Status != TransactionStatus.Denied, includeProperties: "Property,TransactionTypeNavigation");
-           
-            if (transaction == null || transaction.Status == TransactionStatus.Denied)
+            var transaction = _transactionRepository.GetAll(x => x.BuyerId == userId && x.PropertyId == model.Property.Id, includeProperties: "Property,TransactionTypeNavigation").OrderByDescending(x=>x.Date).FirstOrDefault();
+
+            if (transaction == null || transaction.Status == TransactionStatus.Denied || transaction.Status == TransactionStatus.Sold)
             {
                 if (ModelState.IsValid)
                 {
@@ -66,8 +71,10 @@ namespace Presentation.Areas.Company.Controllers
                     {
                         model.Transaction.TotalPrice = model.Property.Price;
                     }
+                    var user = _userRepository.GetFirstOrDefault(x => x.Id == model.Property.UserId);
+                    var currentUserEmail = _userService.GetUserEmail();
 
-
+                    _emailSender.SendEmailAsync(user.Email, "New Request", $"New Reuqest from: {currentUserEmail} for property{model.Property.Name}");
                     _transactionRepository.Add(model.Transaction);
                     TempData["success"] = "Request is made successfully";
                     return RedirectToAction("Index", "Home", new { area = "Individual" });
@@ -118,6 +125,9 @@ namespace Presentation.Areas.Company.Controllers
                 _transactionRepository.SaveChanges();
                 _propertyRepository.UpdateStatus(property, PropertyStatus.Rented);
                 _propertyRepository.SaveChanges();
+                var user = _userRepository.GetFirstOrDefault(x => x.Id == transaction.BuyerId);
+
+                _emailSender.SendEmailAsync(user.Email, "Request Approved for Rent", $"Your Rent Request for {property.Name} was approved");
                 return View(nameof(Index));
 
             }
@@ -126,6 +136,9 @@ namespace Presentation.Areas.Company.Controllers
                 _transactionRepository.UpdateStatus(transaction, TransactionStatus.Sold);
                 transaction.Property.UserId = transaction.BuyerId;
                 _transactionRepository.SaveChanges();
+                var user = _userRepository.GetFirstOrDefault(x => x.Id == transaction.BuyerId);
+
+                _emailSender.SendEmailAsync(user.Email, "Request Approved for Sale", $"Your request to buy the Property: {property.Name} was approved");
                 return View(nameof(Index));
             }
 
@@ -135,8 +148,12 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult RejectRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id);
+            var property = _propertyRepository.GetFirstOrDefault(x => x.Id == transaction.PropertyId);
             _transactionRepository.UpdateStatus(transaction, TransactionStatus.Denied);
             _transactionRepository.SaveChanges();
+            var user = _userRepository.GetFirstOrDefault(x => x.Id == transaction.BuyerId);
+
+            _emailSender.SendEmailAsync(user.Email, "Request Denied", $"Your Request for {property.Name} was Denied");
             return View(nameof(Index));
         }
 

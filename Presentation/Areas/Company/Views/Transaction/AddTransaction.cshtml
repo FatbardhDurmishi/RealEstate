@@ -42,6 +42,7 @@
             <input type="hidden" asp-for="@Model.Property.UserId" />
             <input type="hidden" asp-for="@Model.Property.TransactionType" />
             <input type="hidden" asp-for="@Model.Property.PropertyType" />
+            <input type="hidden" asp-for="@Model.Property.Price" />
             <input type="hidden" asp-for="@Model.Property.TransactionTypeNavigation" />
             <div class="row">
                 <div class="form-floating mb-3 col-sm-6 ">
@@ -124,6 +125,6 @@
     </div>
 </div>
 
-@section Scripts{
+@*@section Scripts{
     <partial name="_ValidationScriptsPartial" />
-}
+}*@
