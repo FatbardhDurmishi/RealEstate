@@ -107,7 +107,12 @@ namespace Presentation.Areas.Individual.Controllers
                     var roles = await _userManager.GetRolesAsync(user);
 
                     var userRole = roles.FirstOrDefault();
-                    return RedirectToAction("Dashboard", "Home", new { area = "Individual" });
+                    if(userRole==RoleConstants.Role_User_Comp || userRole == RoleConstants.Role_User_Comp)
+                    {
+                        return RedirectToAction("Dashboard", "Home", new { area = "Individual" });
+
+                    }
+                    return RedirectToAction("Index", "User", new { area = "Admin" });
 
                     //_logger.LogInformation("User logged in.");
                     //return RedirectToLocal(returnUrl);
