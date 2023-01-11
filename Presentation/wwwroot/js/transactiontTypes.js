@@ -6,6 +6,10 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $("#transactiontypes-list").DataTable({
+        buttons: [
+            'copy', 'excel', 'pdf'
+        ],
+        dom: 'Bfrtip',
         pageLength: 15,
         responsive: true,
         autoWidth: false,
