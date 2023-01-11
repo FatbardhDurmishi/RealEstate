@@ -23,6 +23,7 @@
                 <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-item nav-link"><i class="nav-icon fas fa-user me-2"></i>@SharedLocalizer["Users"]</a>
                 <a asp-area="Admin" asp-controller="PropertyTypes" asp-action="Index" class="nav-item nav-link"><i class="fa fa-layer-group me-2"></i>@SharedLocalizer["PropertyTypes"]</a>
                 <a asp-area="Admin" asp-controller="TransactionTypes" asp-action="Index" class="nav-item nav-link"><i class="fa fa-layer-group me-2"></i>@SharedLocalizer["TransactionTypes"]</a>
+                <a asp-area="Company" asp-controller="Transaction" asp-action="Index" class="nav-item nav-link"><i class="fa-sharp fa-solid fa-euro-sign"></i>@SharedLocalizer["Transactions"]</a>
             }
 
             @if (userService.GetUserRole() == RoleConstants.Role_User_Indi || userService.GetUserRole() == RoleConstants.Role_User_Comp)

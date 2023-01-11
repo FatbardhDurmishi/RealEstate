@@ -49,7 +49,6 @@ function loadDataTable() {
                         return ` 
                          <div class="w-50 btn-group align-items-center" role="group">
                             <a href="/Company/Transaction/Details?id=${data.id}" class="btn btn-secondary mx-2"><i class="fa-solid fa-circle-info"></i></a>
-                            <a onClick=Delete('/Company/Transaction/Delete/${data.id}') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i></a>
                          </div>`;
                     }
                 }

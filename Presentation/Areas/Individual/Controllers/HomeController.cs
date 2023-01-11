@@ -11,7 +11,7 @@ using RealEstate.App.Interfaces;
 namespace Presentation.Areas.Individual.Controllers
 {
     [Area(AreaConstants.Individual)]
-    [Authorize(Roles = RoleConstants.Role_User_Comp +" "+ RoleConstants.Role_User_Indi)]
+    [Authorize(Roles = RoleConstants.Role_User_Comp +","+ RoleConstants.Role_User_Indi)]
     public class HomeController : Controller
     {
         private readonly IPropertyRepository _propertyRepository;
@@ -115,7 +115,7 @@ namespace Presentation.Areas.Individual.Controllers
             }
 
         }
-
+        [AllowAnonymous]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             try

@@ -28,6 +28,7 @@ namespace Presentation.Areas.Company.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -49,7 +50,7 @@ namespace Presentation.Areas.Company.Controllers
         public IActionResult AddTransaction(TransactionVM model)
         {
             var userId = _userService.GetUserId();
-            var transaction = _transactionRepository.GetAll(x => x.BuyerId == userId && x.PropertyId == model.Property.Id, includeProperties: "Property,TransactionTypeNavigation").OrderByDescending(x=>x.Date).FirstOrDefault();
+            var transaction = _transactionRepository.GetAll(x => x.BuyerId == userId && x.PropertyId == model.Property.Id, includeProperties: "Property,TransactionTypeNavigation").OrderByDescending(x => x.Date).FirstOrDefault();
 
             if (transaction == null || transaction.Status == TransactionStatus.Denied || transaction.Status == TransactionStatus.Sold)
             {
@@ -144,7 +145,6 @@ namespace Presentation.Areas.Company.Controllers
 
         }
 
-
         public IActionResult RejectRequest(int id)
         {
             var transaction = _transactionRepository.GetFirstOrDefault(x => x.Id == id);
@@ -159,7 +159,7 @@ namespace Presentation.Areas.Company.Controllers
 
 
         #region API CALLS
-
+        [AllowAnonymous]
         public IActionResult GetTransactions()
         {
             if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)
@@ -169,7 +169,7 @@ namespace Presentation.Areas.Company.Controllers
                 return Json(transactions);
 
             }
-            else
+            else if (_userService.GetUserRole() == RoleConstants.Role_User_Indi)
             {
                 var userId = _userService.GetUserId();
                 var transactions = _transactionRepository.GetAll(x => x.OwnerId == userId || x.BuyerId == userId, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation");
@@ -181,6 +181,11 @@ namespace Presentation.Areas.Company.Controllers
                     }
                 }
 
+                return Json(transactions);
+            }
+            else
+            {
+                var transactions = _transactionRepository.GetAll(includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation");
                 return Json(transactions);
             }
 

@@ -107,7 +107,7 @@ namespace Presentation.Areas.Individual.Controllers
                     var roles = await _userManager.GetRolesAsync(user);
 
                     var userRole = roles.FirstOrDefault();
-                    if(userRole==RoleConstants.Role_User_Comp || userRole == RoleConstants.Role_User_Comp)
+                    if(userRole==RoleConstants.Role_User_Comp || userRole == RoleConstants.Role_User_Indi)
                     {
                         return RedirectToAction("Dashboard", "Home", new { area = "Individual" });
 
