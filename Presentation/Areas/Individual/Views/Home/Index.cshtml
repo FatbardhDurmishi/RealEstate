@@ -207,10 +207,10 @@ else
 }
 @section Scripts{
     <script>
-        var saleMinPriceOptions = ['10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
-        var saleMaxPriceOptions = ['10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
-        var rentMinPriceOptions = ['200', '250', '300', '400', '500', '700'];
-        var rentMaxPriceOptions = ['200', '250', '300', '400', '500', '700'];
+        var saleMinPriceOptions = ['@SharedLocalizer["MinPrice"]', '10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
+        var saleMaxPriceOptions = ['@SharedLocalizer["MaxPrice"]', '10000', '20000', '25000', '30000', '50000', '100000', '150000', '200000'];
+        var rentMinPriceOptions = ['@SharedLocalizer["MinPrice"]', '200', '250', '300', '400', '500', '700'];
+        var rentMaxPriceOptions = ['@SharedLocalizer["MaxPrice"]ax Price', '200', '250', '300', '400', '500', '700'];
 
         $('#transactionType').change(function () {
             var option = $(this).val();

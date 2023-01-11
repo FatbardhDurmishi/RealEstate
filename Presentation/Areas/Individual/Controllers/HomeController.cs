@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Presentation.Models;
 using RealEstate.App.Constants;
 using RealEstate.App.Interfaces;
-using RealEstate.Data.Entities;
 
 namespace Presentation.Areas.Individual.Controllers
 {
@@ -69,14 +68,14 @@ namespace Presentation.Areas.Individual.Controllers
                 //ViewBag.RentThisYear
                 ViewBag.BestSellThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Sale && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.TotalPrice).Select(x => x.TotalPrice).FirstOrDefault();
 
-                ViewBag.BestRentThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.RentPrice).Take(1).Select(x => x.RentPrice);
+                ViewBag.BestRentThisYear = _transactionRepository.GetAll(x => x.OwnerId == userId && x.TransactionTypeNavigation.Name == TransactionTypes.Rent && x.Date.Year == DateTime.Now.Year, includeProperties: "Owner,Buyer,Property,TransactionTypeNavigation").OrderByDescending(x => x.RentPrice).Select(x => x.RentPrice).FirstOrDefault();
                 return View(latestTransactions);
 
 
             }
 
         }
-
+        [AllowAnonymous]
         public IActionResult Index(string? city, int? bedrooms, int? bathrooms, decimal? minPrice, decimal? maxPrice, int? propertyType, int? transactionType)
         {
             ViewBag.PropertyTypes = new SelectList(_propertyTypeRepository.GetAll(), "Id", "Name");
