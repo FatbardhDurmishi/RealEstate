@@ -28,7 +28,6 @@ namespace Presentation.Areas.Company.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -137,6 +136,10 @@ namespace Presentation.Areas.Company.Controllers
                 _transactionRepository.UpdateStatus(transaction, TransactionStatus.Sold);
                 transaction.Property.UserId = transaction.BuyerId;
                 _transactionRepository.SaveChanges();
+
+                _propertyRepository.UpdateStatus(property, PropertyStatus.Sold);
+                _propertyRepository.SaveChanges();
+
                 var user = _userRepository.GetFirstOrDefault(x => x.Id == transaction.BuyerId);
 
                 _emailSender.SendEmailAsync(user.Email, "Request Approved for Sale", $"Your request to buy the Property: {property.Name} was approved");
@@ -159,7 +162,6 @@ namespace Presentation.Areas.Company.Controllers
 
 
         #region API CALLS
-        [AllowAnonymous]
         public IActionResult GetTransactions()
         {
             if (_userService.GetUserRole() == RoleConstants.Role_User_Comp)

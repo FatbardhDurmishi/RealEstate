@@ -42,7 +42,7 @@ namespace Presentation.Areas.Admin.Controllers
                 {
                     var typemodel = new TransactionTypeVM()
                     {
-
+                        Id = type.Id,
                         Name = type.Name!,
 
 

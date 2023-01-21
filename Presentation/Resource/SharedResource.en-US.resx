@@ -144,6 +144,9 @@
   <data name="ClearFilters" xml:space="preserve">
     <value>Clear Filters</value>
   </data>
+  <data name="CloseHelp" xml:space="preserve">
+    <value>Close Help</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="PropertyTypes" xml:space="preserve">
     <value>Property Types</value>
+  </data>
+  <data name="QuickHelp" xml:space="preserve">
+    <value>Quick Help</value>
   </data>
   <data name="RecentTransactions" xml:space="preserve">
     <value>Recent Transactions</value>

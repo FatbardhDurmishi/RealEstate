@@ -46,7 +46,7 @@ namespace Presentation.Areas.Admin.Controllers
                 {
                     var typemodel = new PropertyTypeVM()
                     {
-
+                        Id = type.Id,
                         Name = type.Name!,
 
 
@@ -84,7 +84,7 @@ namespace Presentation.Areas.Admin.Controllers
                         TempData["success"] = "Property type  updated successfully";
                         return RedirectToAction(nameof(Index));
                     }
-                
+
                 }
             }
 
@@ -103,7 +103,7 @@ namespace Presentation.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            var obj = _propertyTypeRepository.GetFirstOrDefault(x=>x.Id ==id);
+            var obj = _propertyTypeRepository.GetFirstOrDefault(x => x.Id == id);
 
             if (obj == null)
             {

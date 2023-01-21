@@ -144,6 +144,9 @@
   <data name="ClearFilters" xml:space="preserve">
     <value>Largo Filtrat</value>
   </data>
+  <data name="CloseHelp" xml:space="preserve">
+    <value>Mbyll Ndihmën</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Paneli</value>
   </data>
@@ -174,6 +177,9 @@
   <data name="MyProperties" xml:space="preserve">
     <value>Pronat e mia</value>
   </data>
+  <data name="OpenHelp" xml:space="preserve">
+    <value>Hap Ndihmen</value>
+  </data>
   <data name="ProfitFromRentThisMonth" xml:space="preserve">
     <value>Fitimet nga qiraja këtë muaj</value>
   </data>
@@ -188,6 +194,9 @@
   </data>
   <data name="PropertyTypes" xml:space="preserve">
     <value>Llojet e Pronave</value>
+  </data>
+  <data name="QuickHelp" xml:space="preserve">
+    <value>Ndihma shpejtë</value>
   </data>
   <data name="RecentTransactions" xml:space="preserve">
     <value>Transaksionet me te fundit</value>
