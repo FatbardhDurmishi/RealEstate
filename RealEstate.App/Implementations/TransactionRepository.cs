@@ -24,17 +24,20 @@ namespace RealEstate.App.Implementations
         public void CheckTransactionDate()
         {
             var transactions = _db.Transactions.Include(x => x.TransactionTypeNavigation).Where(x => x.TransactionTypeNavigation.Name == TransactionTypes.Rent).ToList();
-
-            foreach (var transaction in transactions)
+            if (transactions != null)
             {
-                if (transaction.RentEndDate < DateTime.Now && transaction.Status!=TransactionStatus.Expired)
+
+                foreach (var transaction in transactions)
                 {
-                    transaction.Status = TransactionStatus.Expired;
-                    var property = _db.Properties.Find(transaction.PropertyId);
-                    if (property != null)
+                    if (transaction.RentEndDate < DateTime.Now && transaction.Status != TransactionStatus.Expired)
                     {
-                        property.Status = PropertyStatus.Free;
-                        _db.SaveChanges();
+                        transaction.Status = TransactionStatus.Expired;
+                        var property = _db.Properties.Find(transaction.PropertyId);
+                        if (property != null)
+                        {
+                            property.Status = PropertyStatus.Free;
+                            _db.SaveChanges();
+                        }
                     }
                 }
             }

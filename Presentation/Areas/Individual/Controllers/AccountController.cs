@@ -58,31 +58,31 @@ namespace Presentation.Areas.Individual.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string? returnUrl)
         {
-            //if (!_roleManager.RoleExistsAsync(RoleConstants.Role_Admin).GetAwaiter().GetResult())
-            //{
-            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_Admin)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Indi)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Comp)).GetAwaiter().GetResult();
-            //}
-            //if (_userRepository.GetAll().Count() < 1)
-            //{
-            //    var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
+            if (!_roleManager.RoleExistsAsync(RoleConstants.Role_Admin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Indi)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RoleConstants.Role_User_Comp)).GetAwaiter().GetResult();
+            }
+            if (_userRepository.GetAll().Count() < 1)
+            {
+                var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
 
-            //    user.StreetAddres = "Admin";
-            //    user.City = "Admin";
-            //    user.State = "Admin";
-            //    user.PostalCode = "Admin";
-            //    user.Name = "Admin";
-            //    user.PhoneNumber = "Admin";
-            //    user.Role = "Admin";
+                user.StreetAddres = "Admin";
+                user.City = "Admin";
+                user.State = "Admin";
+                user.PostalCode = "Admin";
+                user.Name = "Admin";
+                user.PhoneNumber = "Admin";
+                user.Role = "Admin";
 
-            //    var result = await _userManager.CreateAsync(user, "Admin.123");
+                var result = await _userManager.CreateAsync(user, "Admin.123");
 
-            //    if (result.Succeeded)
-            //    {
-            //        await _userManager.AddToRoleAsync(user, RoleConstants.Role_Admin);
-            //    }
-            //}
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, RoleConstants.Role_Admin);
+                }
+            }
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
