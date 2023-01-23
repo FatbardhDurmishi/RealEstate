@@ -167,7 +167,7 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area=Individual}/{controller=Account}/{action=Login}/{id?}"
+        pattern: "{area=Individual}/{controller=Home}/{action=Index}/{id?}"
         );
 });
 
