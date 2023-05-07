@@ -136,12 +136,13 @@
                     @if (Model.Property.Id != 0)
                     {
 
-                        <div class=" file-drop-zone clearfix">
+                        @*<div class=" file-drop-zone clearfix">
                             <div class="file-preview-thumbnails clearfix">
                                 @foreach (var image in Model.Property.PropertyImages)
                                 {
+                                {
                                     @*id = "thumb-input-24-init-0"*@
-                                    <input type="hidden" asp-for="@image.Id" />
+                                   @* <input type="hidden" asp-for="@image.Id" />
 
                                     <div id="@image.Id" class="file-preview-frame krajee-default  file-preview-initial file-sortable kv-preview-thumb rotatable" data-fileindex="init-0" data-fileid="thumb-input-25-init-0" data-filename="MoonFull.jpg" data-template="image" data-zoom="http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fe%2Fe1%2FFullMoon2010.jpg%2F631px-FullMoon2010.jpg">
 
@@ -168,9 +169,50 @@
 
                                     </div>
                                 }
+                                <div class="file-preview-status text-center text-success"></div>
+                                <div class="kv-fileinput-error file-error-message" style="display: none;"></div>
+                            </div>
+                        </div>*@
+                        @*<input asp-for="@Model.DeleteImageIdArr" type="hidden" name="DeleteImageIdArr" id="DeleteImageIdArr" />*@
+
+                        <div class=" file-drop-zone clearfix">
+                            <div class="file-preview-thumbnails clearfix">
+                                @foreach (var url in Model.Property.AwsUrls)
+                                {
+
+                                    foreach(var image in Model.Property.PropertyImages)
+                                    {
+                                        if (url.Contains(image.ImageUrl))
+                                        {
+                                            @*<input type="hidden" asp-for="@image.ImageUrl" />*@
+
+                                        <div id="@image.ImageUrl" class="file-preview-frame krajee-default  file-preview-initial file-sortable kv-preview-thumb rotatable" data-fileindex="init-0" data-fileid="thumb-input-25-init-0" data-template="image">
+
+                                            <div class="kv-file-content">
+                                                <img src="@url" class="file-preview-image kv-preview-data" style="width: auto; height: auto; max-width: 100%; max-height: 100%;">
+                                            </div>
+                                            <div class="file-thumbnail-footer">
+                                                <div class="file-thumb-progress kv-hidden">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info progress-bar-info progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="101" aria-valuemin="0" aria-valuemax="100" style="width: 101%;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="file-actions">
+                                                    <div class="file-footer-buttons">
+                                                            <button data-imageId="@image.ImageUrl" id="btnDelete" onclick="HideImage(`@image.ImageUrl`)" type="button" class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary" title="Remove file" data-url="" data-key="1"><i class="bi-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                                <span class="file-drag-handle drag-handle-init text-primary" title="Move / Rearrange"><i class="bi-arrows-move"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
 
 
-
+                                        </div>
+                                        }
+                                    }
+                                }
                                 <div class="file-preview-status text-center text-success"></div>
                                 <div class="kv-fileinput-error file-error-message" style="display: none;"></div>
                             </div>
@@ -178,7 +220,7 @@
 
 
                     }
-                    <input asp-for="@Model.DeleteImageIdArr" type="hidden" name="DeleteImageIdArr" id="DeleteImageIdArr" />
+                    <input asp-for="@Model.DeleteImageAws" type="hidden" name="DeleteImageAws" id="DeleteImageAws" />
 
 
                     @if (Model.Property.Id != 0)
@@ -214,17 +256,27 @@
         <script src="https://cdn.tiny.cloud/1/8nmp0h00j9mvwkmze0o0mof0lkhqm77c6afbdp31ne2leuc4/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     }
     <script>
+        //function HideImage(v) {
+        //    var img = document.getElementById(v)
+        //    img.style.visibility = "hidden";
+        //    var arr = [];
+        //    arr.push(v);
+        //    $('#DeleteImageIdArr').val(JSON.parse(arr));
+
+
+
+        //    console.log(v)
+
+        //}
         function HideImage(v) {
+            console.log("HideImageAws called with ID: " + v);
             var img = document.getElementById(v)
             img.style.visibility = "hidden";
             var arr = [];
             arr.push(v);
-            $('#DeleteImageIdArr').val(JSON.parse(arr));
+            $('#DeleteImageAws').val(arr);
 
-
-
-            console.log(v)
-            console.log(id)
+            console.log(v);
 
         }
     </script>

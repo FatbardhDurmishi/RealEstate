@@ -2,35 +2,35 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RealEstate.Data.Context;
 
 #nullable disable
 
-namespace RealEstate.Data.Migrations.DBRealEstate
+namespace RealEstate.Data.Migrations
 {
     [DbContext(typeof(DBRealEstateContext))]
-    [Migration("20221120181004_addPropertyAndPropertyImages")]
-    partial class addPropertyAndPropertyImages
+    [Migration("20230503171953_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "6.0.12")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("AspNetRoleAspNetUser", b =>
                 {
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("RoleId", "UserId");
 
@@ -40,10 +40,10 @@ namespace RealEstate.Data.Migrations.DBRealEstate
             modelBuilder.Entity("AspNetUserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -55,18 +55,18 @@ namespace RealEstate.Data.Migrations.DBRealEstate
             modelBuilder.Entity("RealEstate.Data.Entities.AspNetRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -81,19 +81,19 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -105,75 +105,75 @@ namespace RealEstate.Data.Migrations.DBRealEstate
             modelBuilder.Entity("RealEstate.Data.Entities.AspNetUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CompanyId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("StreetAddres")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -190,19 +190,19 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -215,18 +215,18 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -238,18 +238,18 @@ namespace RealEstate.Data.Migrations.DBRealEstate
             modelBuilder.Entity("RealEstate.Data.Entities.AspNetUserToken", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -260,58 +260,68 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Area")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric(18,2)");
 
-                    b.Property<int?>("Bathrooms")
-                        .HasColumnType("int");
+                    b.Property<int?>("BathRooms")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("BedRooms")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("CoverImageUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int?>("PropertyType")
+                        .HasColumnType("integer");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<string>("StreetAddres")
+                    b.Property<string>("StreetAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int?>("TransactionType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PropertyType");
 
                     b.HasIndex("TransactionType");
 
@@ -324,16 +334,16 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PropertyId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -342,21 +352,94 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                     b.ToTable("PropertyImages");
                 });
 
+            modelBuilder.Entity("RealEstate.Data.Entities.PropertyType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PropertyTypes");
+                });
+
             modelBuilder.Entity("RealEstate.Data.Entities.Transaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("BuyerId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<int?>("PropertyId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("RentEndDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<decimal?>("RentPrice")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("RentStartDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<decimal?>("TotalPrice")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int?>("TransactionType")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transaction");
+                    b.HasIndex("BuyerId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("TransactionType");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Entities.TransactionsType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionsTypes");
                 });
 
             modelBuilder.Entity("AspNetUserRole", b =>
@@ -420,19 +503,26 @@ namespace RealEstate.Data.Migrations.DBRealEstate
 
             modelBuilder.Entity("RealEstate.Data.Entities.Property", b =>
                 {
-                    b.HasOne("RealEstate.Data.Entities.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionType");
+                    b.HasOne("RealEstate.Data.Entities.PropertyType", "PropertyTypeNavigation")
+                        .WithMany("Properties")
+                        .HasForeignKey("PropertyType")
+                        .HasConstraintName("FK__Propertie__Prope__74AE54BC");
 
-                    b.HasOne("RealEstate.Data.Entities.AspNetUser", "AspNetUser")
-                        .WithMany()
+                    b.HasOne("RealEstate.Data.Entities.TransactionsType", "TransactionTypeNavigation")
+                        .WithMany("Properties")
+                        .HasForeignKey("TransactionType")
+                        .HasConstraintName("FK__Propertie__Trans__72C60C4A");
+
+                    b.HasOne("RealEstate.Data.Entities.AspNetUser", "User")
+                        .WithMany("Properties")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK__Propertie__UserI__73BA3083");
 
-                    b.Navigation("AspNetUser");
+                    b.Navigation("PropertyTypeNavigation");
 
-                    b.Navigation("Transaction");
+                    b.Navigation("TransactionTypeNavigation");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Entities.PropertyImage", b =>
@@ -440,10 +530,40 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                     b.HasOne("RealEstate.Data.Entities.Property", "Property")
                         .WithMany("PropertyImages")
                         .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK__PropertyI__Prope__778AC167");
 
                     b.Navigation("Property");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Entities.Transaction", b =>
+                {
+                    b.HasOne("RealEstate.Data.Entities.AspNetUser", "Buyer")
+                        .WithMany("TransactionBuyers")
+                        .HasForeignKey("BuyerId")
+                        .HasConstraintName("FK__Transacti__Buyer__2DE6D218");
+
+                    b.HasOne("RealEstate.Data.Entities.AspNetUser", "Owner")
+                        .WithMany("TransactionOwners")
+                        .HasForeignKey("OwnerId")
+                        .HasConstraintName("FK__Transacti__Owner__2CF2ADDF");
+
+                    b.HasOne("RealEstate.Data.Entities.Property", "Property")
+                        .WithMany("Transactions")
+                        .HasForeignKey("PropertyId")
+                        .HasConstraintName("FK__Transacti__Prope__2EDAF651");
+
+                    b.HasOne("RealEstate.Data.Entities.TransactionsType", "TransactionTypeNavigation")
+                        .WithMany("Transactions")
+                        .HasForeignKey("TransactionType")
+                        .HasConstraintName("FK__Transacti__Trans__2FCF1A8A");
+
+                    b.Navigation("Buyer");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Property");
+
+                    b.Navigation("TransactionTypeNavigation");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Entities.AspNetRole", b =>
@@ -458,11 +578,31 @@ namespace RealEstate.Data.Migrations.DBRealEstate
                     b.Navigation("AspNetUserLogins");
 
                     b.Navigation("AspNetUserTokens");
+
+                    b.Navigation("Properties");
+
+                    b.Navigation("TransactionBuyers");
+
+                    b.Navigation("TransactionOwners");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Entities.Property", b =>
                 {
                     b.Navigation("PropertyImages");
+
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Entities.PropertyType", b =>
+                {
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Entities.TransactionsType", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

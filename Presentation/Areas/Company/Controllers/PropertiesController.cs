@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.S3.Transfer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Presentation.Areas.Company.Models.PropertyVM;
@@ -71,10 +74,14 @@ namespace Presentation.Areas.Company.Controllers
             }
             else
             {
-
+                var client = new AmazonS3Client(new AmazonS3Config
+                {
+                    RegionEndpoint = Amazon.RegionEndpoint.USEast1,
+                });
                 var model = new PropertyVM()
                 {
                     Property = _propertyRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "User,TransactionTypeNavigation,PropertyTypeNavigation,PropertyImages"),
+
                     TransactionList = _transactionTypeRepository.GetAll().Select(i => new SelectListItem
                     {
                         Text = i.Name,
@@ -98,7 +105,37 @@ namespace Presentation.Areas.Company.Controllers
                     })
 
 
-                };
+                }; 
+                foreach (var item in model.Property.PropertyImages)
+                {
+                    GetObjectMetadataRequest objectAws = new GetObjectMetadataRequest()
+                    {
+                        BucketName = "riinvest-cloud",
+                        Key = item.ImageUrl,
+
+                    };
+                   
+
+                    if (objectAws != null)
+                    {
+                        string url = client.GetPreSignedURL(new GetPreSignedUrlRequest
+                        {
+                            BucketName = "riinvest-cloud",
+                            Key = item.ImageUrl,
+                            Expires = DateTime.Now.AddMinutes(10) // set expiration time as needed
+                        });
+                        model.Property.AwsUrls.Add(url);
+
+                        // use the URL here
+                    }
+                    //var url = client.GetPreSignedURL(new GetPreSignedUrlRequest
+                    //{
+                    //    BucketName = "riinvest-cloud",
+                    //    Key = item.ImageUrl,
+                    //    Expires = DateTime.Now.AddMinutes(10)
+                    //});
+                }
+
                 return View(model);
             }
 
@@ -108,44 +145,73 @@ namespace Presentation.Areas.Company.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(PropertyVM model)
         {
+            var client = new AmazonS3Client(new AmazonS3Config
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.USEast1,
+            });
+            var transferUtility = new TransferUtility(client);
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (model.CoverImage != null)
                 {
 
-                    string filename = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(wwwRootPath, @"Images/Property/PropertyCoverPhoto");
-                    var extension = Path.GetExtension(model.CoverImage.FileName);
-                    if (model.Property.CoverImageUrl != null)
+                    var request = new TransferUtilityUploadRequest
                     {
-                        var oldImagePath = Path.Combine(wwwRootPath, model.Property.CoverImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
-                    using (var fileStreams = new FileStream(Path.Combine(uploads, filename + extension), FileMode.Create))
-                    {
-                        model.CoverImage.CopyTo(fileStreams);
-                    }
-                    model.Property.CoverImageUrl = @"\Images\Property\PropertyCoverPhoto\" + filename + extension;
+                        BucketName = "riinvest-cloud",
+                        Key = model.CoverImage.FileName,
+                        InputStream = model.CoverImage.OpenReadStream()
+                    };
+                    //var request = new PutObjectRequest
+                    //{
+                    //    BucketName = "riinvest-cloud",
+                    //    Key = model.CoverImage.FileName,
+                    //    InputStream = model.CoverImage.OpenReadStream()
+                    //};
+
+                    var response =  transferUtility.UploadAsync(request);
+                    //string filename = Guid.NewGuid().ToString();
+                    //var uploads = Path.Combine(wwwRootPath, @"Images/Property/PropertyCoverPhoto");
+                    //var extension = Path.GetExtension(model.CoverImage.FileName);
+                    //if (model.Property.CoverImageUrl != null)
+                    //{
+                    //    var oldImagePath = Path.Combine(wwwRootPath, model.Property.CoverImageUrl.TrimStart('\\'));
+                    //    if (System.IO.File.Exists(oldImagePath))
+                    //    {
+                    //        System.IO.File.Delete(oldImagePath);
+                    //    }
+                    //}
+                    //using (var fileStreams = new FileStream(Path.Combine(uploads, filename + extension), FileMode.Create))
+                    //{
+                    //    model.CoverImage.CopyTo(fileStreams);
+                    //}
+                    //model.Property.CoverImageUrl = @"\Images\Property\PropertyCoverPhoto\" + filename + extension;
+                    model.Property.CoverImageUrl = model.CoverImage.FileName;
                 }
                 if (model.PropertyImages != null)
                 {
                     foreach (var item in model.PropertyImages)
                     {
-                        string filename = Guid.NewGuid().ToString();
-                        var uploads = Path.Combine(wwwRootPath, @"Images/Property/PropertyImages");
-                        var extension = Path.GetExtension(item.FileName);
-
-                        using (var fileStreams = new FileStream(Path.Combine(uploads, filename + extension), FileMode.Create))
+                        var request = new TransferUtilityUploadRequest
                         {
-                            item.CopyTo(fileStreams);
-                        }
+                            BucketName = "riinvest-cloud",
+                            Key = item.FileName,
+                            InputStream = item.OpenReadStream()
+                        };
+
+                        var response = transferUtility.UploadAsync(request);
+                        //string filename = Guid.NewGuid().ToString();
+                        //var uploads = Path.Combine(wwwRootPath, @"Images/Property/PropertyImages");
+                        //var extension = Path.GetExtension(item.FileName);
+
+                        //using (var fileStreams = new FileStream(Path.Combine(uploads, filename + extension), FileMode.Create))
+                        //{
+                        //    item.CopyTo(fileStreams);
+                        //}
                         var Image = new PropertyImage()
                         {
-                            ImageUrl = @"\Images\Property\PropertyImages\" + filename + extension
+                            //ImageUrl = @"\Images\Property\PropertyImages\" + filename + extension
+                            ImageUrl = item.FileName.ToString()
                         };
                         model.Property.PropertyImages.Add(Image);
                     }
@@ -165,18 +231,42 @@ namespace Presentation.Areas.Company.Controllers
                 else
                 {
 
-                    if (model.DeleteImageIdArr.Count() > 0)
-                    {
-                        foreach (var id in model.DeleteImageIdArr)
-                        {
+                    //if (model.DeleteImageIdArr.Count() > 0)
+                    //{
+                    //    foreach (var id in model.DeleteImageIdArr)
+                    //    {
 
-                            var image = _propertyImagesRepository.GetFirstOrDefault(x => x.Id == id);
-                            var oldImagePath = Path.Combine(wwwRootPath, image.ImageUrl.TrimStart('\\'));
-                            if (System.IO.File.Exists(oldImagePath))
+                    //        var image = _propertyImagesRepository.GetFirstOrDefault(x => x.Id == id);
+                    //        var request = new DeleteObjectRequest
+                    //        {
+                    //            BucketName = "riinvest-detyra",
+                    //            Key = image.ImageUrl,
+                    //        };
+                    //        //var oldImagePath = Path.Combine(wwwRootPath, image.ImageUrl.TrimStart('\\'));
+                    //        //if (System.IO.File.Exists(oldImagePath))
+                    //        //{
+                    //        //    System.IO.File.Delete(oldImagePath);
+                    //        //}
+                    //        _propertyImagesRepository.Remove(image);
+                    //    }
+                    //}
+
+                    if (model.DeleteImageAws.Count() > 0)
+                    {
+                        foreach(var item in model.DeleteImageAws)
+                        {
+                            var img = _propertyImagesRepository.GetFirstOrDefault(x => x.ImageUrl == item);
+                            if (img != null)
                             {
-                                System.IO.File.Delete(oldImagePath);
+
+                            var request = new DeleteObjectRequest
+                            {
+                                BucketName = "riinvest-cloud",
+                                Key = item,
+                            };
+                            client.DeleteObjectAsync(request);
+                            _propertyImagesRepository.Remove(_propertyImagesRepository.GetFirstOrDefault(x => x.ImageUrl == item));
                             }
-                            _propertyImagesRepository.Remove(image);
                         }
                     }
                     _propertyRepository.Update(model.Property);
@@ -262,7 +352,21 @@ namespace Presentation.Areas.Company.Controllers
         [AllowAnonymous]
         public IActionResult Details(int propertyId)
         {
+            var client = new AmazonS3Client(new AmazonS3Config
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.USEast1,
+            });
             Property obj = _propertyRepository.GetFirstOrDefault(x => x.Id == propertyId, includeProperties: "User,PropertyTypeNavigation,TransactionTypeNavigation,PropertyImages");
+            foreach (var item in obj.PropertyImages)
+            {
+                var url = client.GetPreSignedURL(new GetPreSignedUrlRequest
+                {
+                    BucketName = "riinvest-cloud",
+                    Key = item.ImageUrl,
+                    Expires = DateTime.Now.AddMinutes(10)
+                });
+                obj.AwsUrls.Add(url);
+            }
             return View(obj);
         }
 

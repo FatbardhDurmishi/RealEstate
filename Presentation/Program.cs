@@ -16,10 +16,14 @@ using Presentation.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<IdentityDbContext>(options =>
+//    options.UseSqlServer(connectionString));
 builder.Services.AddDbContext<IdentityDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
+//builder.Services.AddDbContext<DBRealEstateContext>(options =>
+//    options.UseSqlServer(connectionString));
 builder.Services.AddDbContext<DBRealEstateContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

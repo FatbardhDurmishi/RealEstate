@@ -55,7 +55,8 @@ namespace RealEstate.Data.Entities
         public virtual ICollection<Transaction>? Transactions { get; set; }
         [NotMapped]
         public bool ShowButtons = false;
-
+        [NotMapped]
+        public List<string> AwsUrls { get; set; } = new List<string>();
 
 
     }

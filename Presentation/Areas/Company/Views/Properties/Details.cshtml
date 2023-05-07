@@ -104,12 +104,12 @@
                         @{
                             int i = 0;
                         }
-                        @foreach (var img in Model.PropertyImages)
+                        @foreach (var url in Model.AwsUrls)
                         {
                             i++;
                             var active = i == 1 ? "active" : "";
                             <div class="carousel-item w-100 @active">
-                                <img src="@img.ImageUrl" class="d-block w-100 img-fluid img-responsive" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
+                                <img src="@url" class="d-block w-100 img-fluid img-responsive" style="width:100%;aspect-ratio:1;height:auto;" alt="...">
                             </div>
                         }
                     </div>

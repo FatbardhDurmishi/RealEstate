@@ -8,7 +8,7 @@ using RealEstate.App.Constants;
 using RealEstate.App.Implementations;
 using RealEstate.App.Interfaces;
 using RealEstate.Data.Entities;
-using RealEstate.Data.Migrations;
+//using RealEstate.Data.Migrations;
 using System.Xml;
 
 namespace Presentation.Areas.Admin.Controllers
